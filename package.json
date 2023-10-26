@@ -4,15 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:write": "eslint src/ --fix",
-    "lint:es": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "preview": "vite preview",
+    "dev": "vite",
     "format:fix": "prettier --write",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:es": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint:write": "eslint src/ --fix",
+    "precommit": "npm run lint && npm run type",
     "prepare": "husky install",
-    "precommit": "npm run lint && npm run type"
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.2.0",
