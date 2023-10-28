@@ -1,7 +1,16 @@
+import { Component, ReactNode } from 'react';
 import Search from './components/Search';
+import API from './components/API';
 
-function App() {
-  return <Search />;
+class App extends Component {
+  render(): ReactNode {
+    return (
+      <>
+        <Search />
+        <API />
+      </>
+    );
+  }
 }
 
 export default App;
