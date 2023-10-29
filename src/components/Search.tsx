@@ -1,10 +1,9 @@
 import { Component, ReactNode } from 'react';
-import axios from 'axios';
-import { PropsPlug, SearchState } from '../types';
+import { FindTagProps, SearchState } from '../types';
 
-class Search extends Component {
+class Search extends Component<FindTagProps> {
   public state: SearchState;
-  public constructor(props: PropsPlug) {
+  public constructor(props: FindTagProps) {
     super(props);
     const localData: string | null = localStorage.getItem('searchKeys');
     this.state = {
@@ -14,25 +13,14 @@ class Search extends Component {
   }
 
   private catchEnter(key: string): void {
-    if (key === 'Enter') {
-      this.search();
-    }
+    if (key === 'Enter') this.search();
   }
 
   private search = async (): Promise<void> => {
     const cleanQuery: string = this.state.searchKeys.trim();
     this.setState({ searchResult: cleanQuery });
     localStorage.setItem('searchKeys', cleanQuery);
-    console.log(
-      await axios({
-        url: 'https://api.giphy.com/v1/gifs/search',
-        params: {
-          api_key: 'wc4t6jVyKwNgIYR7NvQq0RB70uN94Dl1',
-          q: cleanQuery,
-          limit: 20,
-        },
-      })
-    );
+    this.props.getGif(cleanQuery);
   };
 
   private typing = (text: string): void => {
