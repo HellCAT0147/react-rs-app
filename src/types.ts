@@ -8,16 +8,19 @@ export interface IAPIItem {
 }
 export interface IImage {
   original: IImageOriginal;
+  fixed_width_small_still: IImageOriginal;
 }
 export interface IImageOriginal {
   mp4: string;
+  url: string;
 }
 export interface FindTagProps {
   getGif: (query: string) => void;
 }
 export interface PropsPlug {}
 export interface QueryState {
-  data: IAPIItem[];
+  data?: IAPIItem[];
+  isLoading: boolean;
 }
 export interface SearchState {
   searchKeys: string;

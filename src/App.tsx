@@ -8,15 +8,16 @@ class App extends Component {
   public state: QueryState;
   public constructor(props: PropsPlug) {
     super(props);
-    this.state = { data: [] };
+    this.state = { data: [], isLoading: false };
   }
-  getGif = async (query: string): Promise<string> => {
+  getGif = async (query: string): Promise<void> => {
+    this.setState({ isLoading: true });
     try {
       const response: Response = await axios({
         url: 'https://api.giphy.com/v1/gifs/search',
         params: {
           api_key: 'wc4t6jVyKwNgIYR7NvQq0RB70uN94Dl1',
-          q: query,
+          q: query || 'gif',
           limit: 20,
         },
       });
@@ -29,6 +30,7 @@ class App extends Component {
         ) {
           const data: IAPIItem[] = response.data.data;
           this.setState({ data });
+          this.setState({ isLoading: false });
         }
       } else if (
         'message' in response &&
@@ -36,18 +38,15 @@ class App extends Component {
       ) {
         throw new Error(response.message);
       }
-      return 'asd';
     } catch (error) {
       if (error instanceof Error) console.error(error.message);
     }
-
-    return query;
   };
   render(): ReactNode {
     return (
       <>
         <Search getGif={this.getGif} />
-        <API data={this.state.data} />
+        <API isLoading={this.state.isLoading} data={this.state.data} />
       </>
     );
   }
