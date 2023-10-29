@@ -77,3 +77,32 @@
   cursor: pointer;
   border-radius: 5px;
 }
+
+.loader {
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+
+.loader:before,
+.loader:after {
+  content:"";
+  display: block;
+  border: 24px solid transparent;
+  border-top-color: #085035bb;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: weld-rotate 2s infinite ease-in;
+}
+
+.loader:before {
+  border-color: transparent  transparent transparent #000;
+  animation-delay: 0.5s;
+}
+
+@keyframes weld-rotate {
+  0% , 25% {transform: rotate(0deg)}
+  50% , 75% {transform: rotate(180deg)}
+  100% {transform: rotate(360deg)}
+}

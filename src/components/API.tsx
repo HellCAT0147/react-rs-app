@@ -7,7 +7,7 @@ class API extends Component<QueryState> {
     if (this.props.isLoading) {
       return (
         <section className="api">
-          <h2>Loading...</h2>
+          <span className="loader"></span>
         </section>
       );
     } else if (this.props.data) {
