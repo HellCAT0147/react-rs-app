@@ -12,6 +12,10 @@ class Search extends Component<FindTagProps> {
     };
   }
 
+  componentDidMount(): void {
+    this.search();
+  }
+
   private catchEnter(key: string): void {
     if (key === 'Enter') this.search();
   }

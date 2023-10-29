@@ -7,8 +7,6 @@ class APIItem extends Component<IAPIItem> {
   }
 
   public render(): ReactNode {
-    console.log(this.props);
-
     return (
       <div className="api-item">
         <h3>{this.props.title}</h3>
