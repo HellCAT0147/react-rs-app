@@ -35,12 +35,15 @@ class Search extends Component<FindTagProps> {
     return (
       <section className="search">
         <input
+          className="input-search"
           type="text"
           onChange={(event) => this.typing(event.target.value)}
           onKeyDown={(event) => this.catchEnter(event.key)}
           value={this.state.searchKeys}
         />
-        <button onClick={this.search}>Search</button>
+        <button className="send-button" onClick={this.search}>
+          Search
+        </button>
         <h1 className="query">{this.state.searchResult.toUpperCase()}</h1>
       </section>
     );

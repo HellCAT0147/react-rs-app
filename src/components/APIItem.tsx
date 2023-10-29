@@ -9,8 +9,9 @@ class APIItem extends Component<IAPIItem> {
   public render(): ReactNode {
     return (
       <div className="api-item">
-        <h3>{this.props.title}</h3>
+        <h3 className="item-title">{this.props.title}</h3>
         <video
+          className="item-content"
           poster={this.props.images.fixed_width_small_still.url}
           src={this.props.images.original.mp4}
           autoPlay
