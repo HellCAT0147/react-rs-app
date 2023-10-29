@@ -3,6 +3,8 @@ import Search from './components/Search';
 import API from './components/API';
 import axios from 'axios';
 import { IAPIItem, PropsPlug, QueryState, isSpecificData } from './types';
+import ErrorBoundaryButton from './components/ErrorBoundaryButton';
+import ErrorBoundary from './components/ErrorBoundary';
 
 class App extends Component {
   public state: QueryState;
@@ -44,10 +46,11 @@ class App extends Component {
   };
   render(): ReactNode {
     return (
-      <>
+      <ErrorBoundary>
         <Search getGif={this.getGif} />
+        <ErrorBoundaryButton />
         <API isLoading={this.state.isLoading} data={this.state.data} />
-      </>
+      </ErrorBoundary>
     );
   }
 }

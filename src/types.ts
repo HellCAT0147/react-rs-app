@@ -26,6 +26,9 @@ export interface SearchState {
   searchKeys: string;
   searchResult: string;
 }
+export interface ErrorState {
+  isError: boolean;
+}
 export interface APIState {
   APIItems: IAPIItem[];
 }
