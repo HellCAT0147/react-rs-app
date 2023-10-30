@@ -43,7 +43,10 @@
 }
 
 .item-content {
-  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+  box-shadow:
+    rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
+    rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+    rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
   border-radius: 20px;
   width: 100%;
 }
@@ -86,7 +89,7 @@
 
 .loader:before,
 .loader:after {
-  content:"";
+  content: '';
   display: block;
   border: 24px solid transparent;
   border-top-color: #085035bb;
@@ -97,12 +100,20 @@
 }
 
 .loader:before {
-  border-color: transparent  transparent transparent #000;
+  border-color: transparent transparent transparent #000;
   animation-delay: 0.5s;
 }
 
 @keyframes weld-rotate {
-  0% , 25% {transform: rotate(0deg)}
-  50% , 75% {transform: rotate(180deg)}
-  100% {transform: rotate(360deg)}
+  0%,
+  25% {
+    transform: rotate(0deg);
+  }
+  50%,
+  75% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
