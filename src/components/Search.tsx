@@ -1,53 +1,41 @@
-import { Component, ReactNode } from 'react';
-import { FindTagProps, SearchState } from '../types';
+import { useState } from 'react';
+import { FindTagProps } from '../types';
 
-class Search extends Component<FindTagProps> {
-  public state: SearchState;
-  public constructor(props: FindTagProps) {
-    super(props);
-    const localData: string | null = localStorage.getItem('searchKeys');
-    this.state = {
-      searchResult: localData ?? 'Search result',
-      searchKeys: localData ?? '',
-    };
-  }
+export default function Search(props: FindTagProps): JSX.Element {
+  const localData: string | null = localStorage.getItem('searchKeys');
+  const [searchResult, setSearchResult] = useState<string>(
+    localData || 'Search result'
+  );
+  const [searchKeys, setSearchKeys] = useState<string>(localData || '');
 
-  componentDidMount(): void {
-    this.search();
-  }
+  const catchEnter = (key: string): void => {
+    if (key === 'Enter') search();
+  };
 
-  private catchEnter(key: string): void {
-    if (key === 'Enter') this.search();
-  }
-
-  private search = async (): Promise<void> => {
-    const cleanQuery: string = this.state.searchKeys.trim();
-    this.setState({ searchResult: cleanQuery });
+  const search = async (): Promise<void> => {
+    const cleanQuery: string = searchKeys.trim();
+    setSearchResult(cleanQuery);
     localStorage.setItem('searchKeys', cleanQuery);
-    this.props.getGif(cleanQuery);
+    props.sendQuery(cleanQuery);
   };
 
-  private typing = (text: string): void => {
-    this.setState({ searchKeys: text });
+  const typing = (text: string): void => {
+    setSearchKeys(text);
   };
 
-  public render(): ReactNode {
-    return (
-      <section className="search">
-        <input
-          className="input-search"
-          type="text"
-          onChange={(event) => this.typing(event.target.value)}
-          onKeyDown={(event) => this.catchEnter(event.key)}
-          value={this.state.searchKeys}
-        />
-        <button className="send-button" onClick={this.search}>
-          Search
-        </button>
-        <h1 className="query">{this.state.searchResult.toUpperCase()}</h1>
-      </section>
-    );
-  }
+  return (
+    <section className="search">
+      <input
+        className="input-search"
+        type="text"
+        onChange={(event) => typing(event.target.value)}
+        onKeyDown={(event) => catchEnter(event.key)}
+        value={searchKeys}
+      />
+      <button className="send-button" onClick={search}>
+        Search
+      </button>
+      <h1 className="query">{searchResult.toUpperCase()}</h1>
+    </section>
+  );
 }
-
-export default Search;

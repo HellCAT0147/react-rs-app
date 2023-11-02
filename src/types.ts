@@ -1,10 +1,13 @@
 export interface DataProps {
   data: object[];
 }
-export interface IAPIItem {
+export interface APIItemProps {
   id?: string;
   title: string;
   images: IImage;
+}
+export interface ErrorProps {
+  msg: string;
 }
 export interface IImage {
   original: IImageOriginal;
@@ -15,11 +18,11 @@ export interface IImageOriginal {
   url: string;
 }
 export interface FindTagProps {
-  getGif: (query: string) => void;
+  sendQuery: (query: string) => void;
 }
 export interface PropsPlug {}
 export interface QueryState {
-  data?: IAPIItem[];
+  data?: APIItemProps[];
   isLoading: boolean;
 }
 export interface SearchState {
@@ -30,9 +33,9 @@ export interface ErrorState {
   isError: boolean;
 }
 export interface APIState {
-  APIItems: IAPIItem[];
+  APIItems: APIItemProps[];
 }
-export function isSpecificData(data: unknown): data is IAPIItem[] {
+export function isSpecificData(data: unknown): data is APIItemProps[] {
   if (
     Array.isArray(data) ||
     (typeof data === 'object' && data !== null && 'data' in data)

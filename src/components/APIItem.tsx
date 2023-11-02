@@ -1,26 +1,17 @@
-import { Component, ReactNode } from 'react';
-import { IAPIItem } from '../types';
+import { APIItemProps } from '../types';
 
-class APIItem extends Component<IAPIItem> {
-  public constructor(props: IAPIItem) {
-    super(props);
-  }
-
-  public render(): ReactNode {
-    return (
-      <div className="api-item">
-        <h3 className="item-title">{this.props.title}</h3>
-        <video
-          className="item-content"
-          poster={this.props.images.fixed_width_small_still.url}
-          src={this.props.images.original.mp4}
-          autoPlay
-          loop
-          muted
-        ></video>
-      </div>
-    );
-  }
+export default function APIItem(props: APIItemProps): JSX.Element {
+  return (
+    <div className="api-item">
+      <h3 className="item-title">{props.title}</h3>
+      <video
+        className="item-content"
+        poster={props.images.fixed_width_small_still.url}
+        src={props.images.original.mp4}
+        autoPlay
+        loop
+        muted
+      ></video>
+    </div>
+  );
 }
-
-export default APIItem;
