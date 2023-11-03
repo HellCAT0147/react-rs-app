@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FindTagProps } from '../types';
 
 export default function Search(props: FindTagProps): JSX.Element {
@@ -18,6 +18,10 @@ export default function Search(props: FindTagProps): JSX.Element {
     localStorage.setItem('searchKeys', cleanQuery);
     props.sendQuery(cleanQuery);
   };
+
+  useEffect((): void => {
+    search();
+  }, []);
 
   const typing = (text: string): void => {
     setSearchKeys(text);
