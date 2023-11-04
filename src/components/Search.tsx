@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FindTagProps } from '../utils/types';
 
-export default function Search(props: FindTagProps): JSX.Element {
+export default function Search({ sendQuery }: FindTagProps): JSX.Element {
   const localData: string | null = localStorage.getItem('searchKeys');
   const [searchResult, setSearchResult] = useState<string>(
     localData || 'Search result'
@@ -16,7 +16,7 @@ export default function Search(props: FindTagProps): JSX.Element {
     const cleanQuery: string = searchKeys.trim();
     setSearchResult(cleanQuery);
     localStorage.setItem('searchKeys', cleanQuery);
-    props.sendQuery(cleanQuery);
+    sendQuery(cleanQuery, 1);
   };
 
   useEffect((): void => {

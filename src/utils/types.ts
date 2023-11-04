@@ -18,12 +18,13 @@ export interface IImageOriginal {
   url: string;
 }
 export interface FindTagProps {
-  sendQuery: (query: string) => void;
+  sendQuery: (query: string, page: number) => void;
 }
 export interface PaginationProps {
-  pageNumbers: number[];
+  pageNumbers: Pages;
   activePage: number;
   setActive: (value: number) => void;
+  getNewData: (query: undefined, toPage: number) => Promise<void>;
 }
 export interface PropsPlug {}
 export interface QueryState {
@@ -48,4 +49,8 @@ interface Pagination {
   offset: number;
   total_count: number;
 }
-export type BackData = [Gif[], number[]];
+export interface Pages {
+  numbers: number[];
+  last: number;
+}
+export type BackData = [Gif[], Pages];

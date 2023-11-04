@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import Search from './components/Search';
-import { BackData, Gif } from './utils/types';
+import { BackData, Gif, Pages } from './utils/types';
 import ErrorBoundaryButton from './components/ErrorBoundaryButton';
 import ErrorBoundary from './components/ErrorBoundary';
 import APIError from './components/APIError';
@@ -15,8 +15,7 @@ export default function App(): JSX.Element {
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [limit] = useState<number>(10);
-  const [pages, setPages] = useState<number[]>([]);
-  const [activeQuery, setActiveQuery] = useState<string>('');
+  const [pages, setPages] = useState<Pages>({ numbers: [], last: 0 });
 
   function showError(error?: Error): void {
     if (error) {
@@ -27,39 +26,32 @@ export default function App(): JSX.Element {
     }
   }
 
-  const sendQuery = useCallback(
-    async (query: string): Promise<void> => {
-      setIsLoading(true);
-      setErrorMsg('');
-      if (activeQuery !== query) {
-        setPageNumber(1);
-        setActiveQuery(query);
-      }
+  const sendQuery = async (
+    query: string = localStorage.getItem('searchKeys') || '',
+    toPage?: number
+  ): Promise<void> => {
+    if (toPage) setPageNumber(toPage);
+    setIsLoading(true);
+    setErrorMsg('');
 
-      const response: BackData | Error | false = await getAll(
-        query,
-        pageNumber,
-        limit
-      );
+    const response: BackData | Error | false = await getAll(
+      query,
+      toPage || pageNumber,
+      limit
+    );
 
-      if (isError(response)) {
-        showError(response);
-      } else if (response !== false && isData(response[0])) {
-        const data: Gif[] = response[0];
-        setPages(response[1]);
+    if (isError(response)) {
+      showError(response);
+    } else if (response !== false && isData(response[0])) {
+      const data: Gif[] = response[0];
+      setPages(response[1]);
 
-        setDataState(data);
-      } else {
-        showError();
-      }
-      setIsLoading(false);
-    },
-    [activeQuery, limit, pageNumber]
-  );
-
-  useEffect(() => {
-    sendQuery(activeQuery);
-  }, [activeQuery, pageNumber, sendQuery]);
+      setDataState(data);
+    } else {
+      showError();
+    }
+    setIsLoading(false);
+  };
 
   return (
     <ErrorBoundary>
@@ -74,6 +66,7 @@ export default function App(): JSX.Element {
             pageNumbers={pages}
             activePage={pageNumber}
             setActive={setPageNumber}
+            getNewData={sendQuery}
           />
         </>
       )}

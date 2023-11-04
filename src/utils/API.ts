@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BackData, Gif } from './types';
+import { BackData, Gif, Pages } from './types';
 import { hasPagination, isData } from './type-guards';
 import getPages from './pagination';
 
@@ -30,13 +30,14 @@ export default async function getAll(
         isData(response.data.data)
       ) {
         const data: Gif[] = response.data.data;
-        let pages: number[] = [];
+        let pages: Pages = { numbers: [], last: 0 };
 
         if (hasPagination(response.data)) {
           const total: number = response.data.pagination.total_count;
           const maxAPIOffset: number = 5000;
           pages = getPages(
-            Math.ceil((total > maxAPIOffset ? maxAPIOffset : total) / limit)
+            Math.ceil((total > maxAPIOffset ? maxAPIOffset : total) / limit),
+            page
           );
         }
 

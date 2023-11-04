@@ -121,12 +121,13 @@
 .pagination {
   display: flex;
   justify-content: center;
+  align-items: end;
   flex-wrap: wrap;
+  font-size: 1.5rem;
 }
 
 .page-number {
-  padding: 5px;
-  font-size: 1.5rem;
+  padding: 5px 5px 0;
   cursor: pointer;
 }
 

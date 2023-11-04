@@ -4,10 +4,14 @@ import { PaginationProps } from '../utils/types';
 export default function Pagination(props: PaginationProps): JSX.Element {
   return (
     <div className="pagination">
-      {props.pageNumbers.map(
+      {props.pageNumbers.numbers.includes(1) ? '' : '...'}
+      {props.pageNumbers.numbers.map(
         (page): ReactNode => (
           <span
-            onClick={() => props.setActive(page)}
+            onClick={() => {
+              props.setActive(page);
+              props.getNewData(undefined, page);
+            }}
             className={
               page === props.activePage ? 'page-number active' : 'page-number'
             }
@@ -17,6 +21,7 @@ export default function Pagination(props: PaginationProps): JSX.Element {
           </span>
         )
       )}
+      {props.pageNumbers.numbers.includes(props.pageNumbers.last) ? '' : '...'}
     </div>
   );
 }
