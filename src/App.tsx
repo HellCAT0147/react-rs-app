@@ -1,69 +1,81 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Search from './components/Search';
-import API from './components/API';
-import axios from 'axios';
-import { APIItemProps, isSpecificData } from './types';
+import { BackData, Gif } from './utils/types';
 import ErrorBoundaryButton from './components/ErrorBoundaryButton';
 import ErrorBoundary from './components/ErrorBoundary';
 import APIError from './components/APIError';
+import APIItems from './components/APIItems';
+import getAll from './utils/API';
+import { isError, isData } from './utils/type-guards';
+import Pagination from './components/Pagination';
 
 export default function App(): JSX.Element {
-  const [dataState, setDataState] = useState<APIItemProps[]>([]);
+  const [dataState, setDataState] = useState<Gif[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [ErrorMsg, setErrorMsg] = useState<string>('');
+  const [errorMsg, setErrorMsg] = useState<string>('');
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [limit] = useState<number>(10);
+  const [pages, setPages] = useState<number[]>([]);
+  const [activeQuery, setActiveQuery] = useState<string>('');
 
-  function showError(error: Error): void {
-    console.error(error.message);
-    setIsLoading(false);
-    setErrorMsg(error.message);
+  function showError(error?: Error): void {
+    if (error) {
+      console.error(error.message);
+      setErrorMsg(error.message);
+    } else {
+      setErrorMsg('Server error :( ... Try to visit this app next day :)');
+    }
   }
 
-  const sendQuery = async (query: string): Promise<void> => {
-    setIsLoading(true);
-
-    try {
-      const response: Response = await axios({
-        url: query
-          ? 'https://api.giphy.com/v1/gifs/search'
-          : 'https://api.giphy.com/v1/gifs/trending',
-        params: {
-          api_key: 'wc4t6jVyKwNgIYR7NvQq0RB70uN94Dl1',
-          q: query,
-          limit: 20,
-        },
-      });
-
-      if (response.status === 200) {
-        setErrorMsg('');
-        if (
-          'data' in response &&
-          isSpecificData(response.data) &&
-          'data' in response.data &&
-          isSpecificData(response.data.data)
-        ) {
-          const data: APIItemProps[] = response.data.data;
-          setDataState(data);
-          setIsLoading(false);
-        }
-      } else if (
-        'message' in response &&
-        typeof response.message === 'string'
-      ) {
-        throw new Error(response.message);
+  const sendQuery = useCallback(
+    async (query: string): Promise<void> => {
+      setIsLoading(true);
+      setErrorMsg('');
+      if (activeQuery !== query) {
+        setPageNumber(1);
+        setActiveQuery(query);
       }
-    } catch (error) {
-      if (error instanceof Error) showError(error);
-    }
-  };
+
+      const response: BackData | Error | false = await getAll(
+        query,
+        pageNumber,
+        limit
+      );
+
+      if (isError(response)) {
+        showError(response);
+      } else if (response !== false && isData(response[0])) {
+        const data: Gif[] = response[0];
+        setPages(response[1]);
+
+        setDataState(data);
+      } else {
+        showError();
+      }
+      setIsLoading(false);
+    },
+    [activeQuery, limit, pageNumber]
+  );
+
+  useEffect(() => {
+    sendQuery(activeQuery);
+  }, [activeQuery, pageNumber, sendQuery]);
 
   return (
     <ErrorBoundary>
       <Search sendQuery={sendQuery} />
       <ErrorBoundaryButton />
-      {ErrorMsg ? (
-        <APIError msg={ErrorMsg} />
+      {errorMsg ? (
+        <APIError msg={errorMsg} />
       ) : (
-        <API isLoading={isLoading} data={dataState} />
+        <>
+          <APIItems isLoading={isLoading} data={dataState} />
+          <Pagination
+            pageNumbers={pages}
+            activePage={pageNumber}
+            setActive={setPageNumber}
+          />
+        </>
       )}
     </ErrorBoundary>
   );

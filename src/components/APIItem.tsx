@@ -1,6 +1,6 @@
-import { APIItemProps } from '../types';
+import { Gif } from '../utils/types';
 
-export default function APIItem(props: APIItemProps): JSX.Element {
+export default function APIItem(props: Gif): JSX.Element {
   return (
     <div className="api-item">
       <h3 className="item-title">{props.title}</h3>

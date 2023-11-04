@@ -1,5 +1,5 @@
 import { Component, ReactNode } from 'react';
-import { ErrorState } from '../types';
+import { ErrorState } from '../utils/types';
 
 interface Props {
   children?: ReactNode;

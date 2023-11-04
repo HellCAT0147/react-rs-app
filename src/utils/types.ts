@@ -1,7 +1,7 @@
 export interface DataProps {
   data: object[];
 }
-export interface APIItemProps {
+export interface Gif {
   id?: string;
   title: string;
   images: IImage;
@@ -20,9 +20,14 @@ export interface IImageOriginal {
 export interface FindTagProps {
   sendQuery: (query: string) => void;
 }
+export interface PaginationProps {
+  pageNumbers: number[];
+  activePage: number;
+  setActive: (value: number) => void;
+}
 export interface PropsPlug {}
 export interface QueryState {
-  data?: APIItemProps[];
+  data?: Gif[];
   isLoading: boolean;
 }
 export interface SearchState {
@@ -33,13 +38,14 @@ export interface ErrorState {
   isError: boolean;
 }
 export interface APIState {
-  APIItems: APIItemProps[];
+  APIItems: Gif[];
 }
-export function isSpecificData(data: unknown): data is APIItemProps[] {
-  if (
-    Array.isArray(data) ||
-    (typeof data === 'object' && data !== null && 'data' in data)
-  )
-    return true;
-  return false;
+export interface DataWithPagination {
+  pagination: Pagination;
 }
+interface Pagination {
+  count: number;
+  offset: number;
+  total_count: number;
+}
+export type BackData = [Gif[], number[]];

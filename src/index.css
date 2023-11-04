@@ -8,7 +8,7 @@
 }
 
 #root {
-  margin: 0 auto;
+  margin: 0 auto 20px;
   display: flex;
   flex-direction: column;
 }
@@ -17,8 +17,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  gap: 20px;
-  margin: 20px 0 40px;
+  gap: 40px 20px;
+  margin: 20px 0;
 }
 
 .search {
@@ -116,4 +116,25 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.page-number {
+  padding: 5px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.page-number:hover:not(.active) {
+  text-decoration: underline;
+}
+
+.page-number.active {
+  color: #bd0000a9;
+  cursor: default;
 }

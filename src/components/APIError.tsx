@@ -1,4 +1,4 @@
-import { ErrorProps } from '../types';
+import { ErrorProps } from '../utils/types';
 
 export default function APIError(props: ErrorProps): JSX.Element {
   return (

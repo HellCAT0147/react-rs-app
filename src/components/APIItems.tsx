@@ -1,7 +1,7 @@
 import APIItem from './APIItem';
-import { QueryState, APIItemProps } from '../types';
+import { QueryState, Gif } from '../utils/types';
 
-export default function API(props: QueryState): JSX.Element {
+export default function APIItems(props: QueryState): JSX.Element {
   if (props.isLoading) {
     return (
       <section className="api">
@@ -9,7 +9,7 @@ export default function API(props: QueryState): JSX.Element {
       </section>
     );
   } else if (props.data) {
-    const data: APIItemProps[] = props.data;
+    const data: Gif[] = props.data;
 
     return (
       <section className="api">

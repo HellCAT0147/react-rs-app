@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FindTagProps } from '../types';
+import { FindTagProps } from '../utils/types';
 
 export default function Search(props: FindTagProps): JSX.Element {
   const localData: string | null = localStorage.getItem('searchKeys');
