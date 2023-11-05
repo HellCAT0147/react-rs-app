@@ -8,7 +8,8 @@ import APIItems from './components/APIItems';
 import getAll from './utils/API';
 import { isError, isData } from './utils/type-guards';
 import Pagination from './components/Pagination';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { LimitContext } from './utils/context';
 
 export default function App(): JSX.Element {
   const [dataState, setDataState] = useState<Gif[]>([]);
@@ -17,8 +18,9 @@ export default function App(): JSX.Element {
   const [pageNumber, setPageNumber] = useState<number>(
     Number(useParams().page)
   );
-  const [limit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(10);
   const [pages, setPages] = useState<Pages>({ numbers: [], last: 0 });
+  const navigator = useNavigate();
 
   function showError(error?: Error): void {
     if (error) {
@@ -36,6 +38,8 @@ export default function App(): JSX.Element {
     if (toPage) setPageNumber(toPage);
     setIsLoading(true);
     setErrorMsg('');
+
+    navigator('/page/1');
 
     const response: BackData | Error | false = await getAll(
       query,
@@ -63,7 +67,7 @@ export default function App(): JSX.Element {
       {errorMsg ? (
         <APIError msg={errorMsg} />
       ) : (
-        <>
+        <LimitContext.Provider value={setLimit}>
           <APIItems isLoading={isLoading} data={dataState} />
           <Pagination
             pageNumbers={pages}
@@ -71,7 +75,7 @@ export default function App(): JSX.Element {
             setActive={setPageNumber}
             getNewData={sendQuery}
           />
-        </>
+        </LimitContext.Provider>
       )}
     </ErrorBoundary>
   );

@@ -118,12 +118,19 @@
   }
 }
 
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.5rem;
+  gap: 20px;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
   align-items: end;
   flex-wrap: wrap;
-  font-size: 1.5rem;
 }
 
 .page-number {
@@ -140,4 +147,38 @@
 .page-number.active {
   color: #bd0000a9;
   cursor: default;
+}
+
+.pages-count {
+  display: flex;
+  font-size: 1.25rem;
+}
+
+.pages-count-handle {
+  margin: 0 10px;
+  max-width: 200px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 15rem;
+}
+
+.pages-count-handle::-webkit-slider-runnable-track {
+  background: #000;
+  height: 0.5rem;
+}
+
+.pages-count-handle::-moz-range-track {
+  background: #000;
+  height: 0.5rem;
+}
+
+.pages-count-handle::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -12px;
+  background-color: #bd0000a9;
+  height: 2rem;
+  width: 1rem;    
 }

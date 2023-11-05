@@ -8,7 +8,9 @@ export default function Search({ sendQuery }: FindTagProps): JSX.Element {
     localData || 'Search result'
   );
   const [searchKeys, setSearchKeys] = useState<string>(localData || '');
-  const [pageNumber] = useState<number>(Number(useParams().page));
+  const [pageNumber, setPageNumber] = useState<number>(
+    Number(useParams().page)
+  );
 
   const catchEnter = (key: string): void => {
     if (key === 'Enter') search();
@@ -18,6 +20,8 @@ export default function Search({ sendQuery }: FindTagProps): JSX.Element {
     const cleanQuery: string = searchKeys.trim();
     setSearchResult(cleanQuery);
     localStorage.setItem('searchKeys', cleanQuery);
+
+    setPageNumber(1);
     sendQuery(cleanQuery, pageNumber);
   };
 
