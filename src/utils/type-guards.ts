@@ -1,4 +1,4 @@
-import { Gif, DataWithPagination } from './types';
+import { Gif, DataWithPagination, DetailedGif } from './types';
 
 export function isData(data: unknown): data is Gif[] {
   if (
@@ -22,6 +22,17 @@ export function hasPagination(
     typeof something === 'object' &&
     something !== null &&
     'pagination' in something
+  )
+    return true;
+  return false;
+}
+
+export function isGif(something: unknown): something is DetailedGif {
+  if (
+    typeof something === 'object' &&
+    something !== null &&
+    'id' in something &&
+    'title' in something
   )
     return true;
   return false;

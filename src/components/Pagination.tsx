@@ -1,7 +1,7 @@
 import { ReactNode, useContext, useState } from 'react';
 import { PaginationProps } from '../utils/types';
 import { Link } from 'react-router-dom';
-import { LimitContext } from '../utils/context';
+import { LimitContext } from '../utils/contexts';
 
 export default function Pagination(props: PaginationProps): JSX.Element {
   const [itemsOnPage, setItemsOnPage] = useState<number>(10);

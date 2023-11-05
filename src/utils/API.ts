@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { BackData, Gif, Pages } from './types';
-import { hasPagination, isData } from './type-guards';
+import { BackData, DetailedGif, Gif, Pages } from './types';
+import { hasPagination, isData, isGif } from './type-guards';
 import getPages from './pagination';
 
 export default async function getAll(
@@ -42,6 +42,34 @@ export default async function getAll(
         }
 
         return [data, pages];
+      }
+    }
+  } catch (error) {
+    if (error instanceof Error) return error;
+  }
+  return false;
+}
+
+export async function getOne(id: string): Promise<DetailedGif | Error | false> {
+  const url: string = 'https://api.giphy.com/v1/gifs/' + id;
+  try {
+    const response: Response = await axios({
+      url,
+      params: {
+        api_key: 'wc4t6jVyKwNgIYR7NvQq0RB70uN94Dl1',
+        gif_id: id,
+      },
+    });
+
+    if (response.status === 200) {
+      if (
+        'data' in response &&
+        isData(response.data) &&
+        'data' in response.data &&
+        isGif(response.data.data)
+      ) {
+        const gif: DetailedGif = response.data.data;
+        return gif;
       }
     }
   } catch (error) {

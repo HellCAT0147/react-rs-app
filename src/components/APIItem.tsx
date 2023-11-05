@@ -1,17 +1,27 @@
-import { Gif } from '../utils/types';
+import { Link } from 'react-router-dom';
+import { APIItemProps } from '../utils/types';
 
-export default function APIItem(props: Gif): JSX.Element {
+export default function APIItem(props: APIItemProps): JSX.Element {
   return (
-    <div className="api-item">
-      <h3 className="item-title">{props.title}</h3>
+    <Link
+      to={'details/' + props.gif.id}
+      className="api-item"
+      onClick={(
+        event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+      ): void => {
+        event.stopPropagation();
+        props.details.setIsDetails(true);
+      }}
+    >
+      <h3 className="item-title">{props.gif.title}</h3>
       <video
         className="item-content"
-        poster={props.images.fixed_width_small_still.url}
-        src={props.images.original.mp4}
+        poster={props.gif.images.fixed_width_small_still.url}
+        src={props.gif.images.original.mp4}
         autoPlay
         loop
         muted
       ></video>
-    </div>
+    </Link>
   );
 }

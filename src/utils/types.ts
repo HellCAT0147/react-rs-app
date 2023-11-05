@@ -2,12 +2,24 @@ export interface DataProps {
   data: object[];
 }
 export interface Gif {
-  id?: string;
+  id: string;
   title: string;
   images: IImage;
 }
+export interface DetailedGif extends Gif {
+  user: User;
+  import_datetime: string;
+}
+interface User {
+  display_name: string;
+  description: string;
+}
 export interface ErrorProps {
   msg: string;
+}
+export interface APIItemProps {
+  gif: Gif;
+  details: DetailsState;
 }
 export interface IImage {
   original: IImageOriginal;
@@ -30,6 +42,11 @@ export interface PropsPlug {}
 export interface QueryState {
   data?: Gif[];
   isLoading: boolean;
+  details: DetailsState;
+}
+interface DetailsState {
+  isDetails: boolean;
+  setIsDetails: (value: boolean) => void;
 }
 export interface SearchState {
   searchKeys: string;

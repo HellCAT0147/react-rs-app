@@ -27,6 +27,7 @@ export default function Search({ sendQuery }: FindTagProps): JSX.Element {
 
   useEffect((): void => {
     search();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const typing = (text: string): void => {

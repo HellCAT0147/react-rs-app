@@ -8,8 +8,8 @@ import APIItems from './components/APIItems';
 import getAll from './utils/API';
 import { isError, isData } from './utils/type-guards';
 import Pagination from './components/Pagination';
-import { useNavigate, useParams } from 'react-router-dom';
-import { LimitContext } from './utils/context';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { LimitContext } from './utils/contexts';
 
 export default function App(): JSX.Element {
   const [dataState, setDataState] = useState<Gif[]>([]);
@@ -20,7 +20,9 @@ export default function App(): JSX.Element {
   );
   const [limit, setLimit] = useState<number>(10);
   const [pages, setPages] = useState<Pages>({ numbers: [], last: 0 });
+  const [isDetails, setIsDetails] = useState<boolean>(false);
   const navigator = useNavigate();
+  const params = useParams();
 
   function showError(error?: Error): void {
     if (error) {
@@ -38,8 +40,14 @@ export default function App(): JSX.Element {
     if (toPage) setPageNumber(toPage);
     setIsLoading(true);
     setErrorMsg('');
+    setIsDetails(false);
 
-    navigator('/page/1');
+    if ('id' in params) {
+      navigator('/page/' + toPage + '/details/' + params.id);
+      setIsDetails(true);
+    } else {
+      navigator('/page/' + toPage);
+    }
 
     const response: BackData | Error | false = await getAll(
       query,
@@ -68,7 +76,20 @@ export default function App(): JSX.Element {
         <APIError msg={errorMsg} />
       ) : (
         <LimitContext.Provider value={setLimit}>
-          <APIItems isLoading={isLoading} data={dataState} />
+          <div
+            className="api"
+            onClick={(): void => {
+              navigator('../page/' + pageNumber);
+              setIsDetails(false);
+            }}
+          >
+            <APIItems
+              isLoading={isLoading}
+              data={dataState}
+              details={{ isDetails, setIsDetails }}
+            />
+            <Outlet />
+          </div>
           <Pagination
             pageNumbers={pages}
             activePage={pageNumber}
