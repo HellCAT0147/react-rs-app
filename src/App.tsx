@@ -8,12 +8,15 @@ import APIItems from './components/APIItems';
 import getAll from './utils/API';
 import { isError, isData } from './utils/type-guards';
 import Pagination from './components/Pagination';
+import { useParams } from 'react-router-dom';
 
 export default function App(): JSX.Element {
   const [dataState, setDataState] = useState<Gif[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageNumber, setPageNumber] = useState<number>(
+    Number(useParams().page)
+  );
   const [limit] = useState<number>(10);
   const [pages, setPages] = useState<Pages>({ numbers: [], last: 0 });
 

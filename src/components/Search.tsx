@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FindTagProps } from '../utils/types';
+import { useParams } from 'react-router-dom';
 
 export default function Search({ sendQuery }: FindTagProps): JSX.Element {
   const localData: string | null = localStorage.getItem('searchKeys');
@@ -7,6 +8,7 @@ export default function Search({ sendQuery }: FindTagProps): JSX.Element {
     localData || 'Search result'
   );
   const [searchKeys, setSearchKeys] = useState<string>(localData || '');
+  const [pageNumber] = useState<number>(Number(useParams().page));
 
   const catchEnter = (key: string): void => {
     if (key === 'Enter') search();
@@ -16,7 +18,7 @@ export default function Search({ sendQuery }: FindTagProps): JSX.Element {
     const cleanQuery: string = searchKeys.trim();
     setSearchResult(cleanQuery);
     localStorage.setItem('searchKeys', cleanQuery);
-    sendQuery(cleanQuery, 1);
+    sendQuery(cleanQuery, pageNumber);
   };
 
   useEffect((): void => {

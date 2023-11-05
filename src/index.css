@@ -129,6 +129,8 @@
 .page-number {
   padding: 5px 5px 0;
   cursor: pointer;
+  text-decoration: none;
+  color: #000;
 }
 
 .page-number:hover:not(.active) {

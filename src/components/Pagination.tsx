@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { PaginationProps } from '../utils/types';
+import { Link } from 'react-router-dom';
 
 export default function Pagination(props: PaginationProps): JSX.Element {
   return (
@@ -7,7 +8,8 @@ export default function Pagination(props: PaginationProps): JSX.Element {
       {props.pageNumbers.numbers.includes(1) ? '' : '...'}
       {props.pageNumbers.numbers.map(
         (page): ReactNode => (
-          <span
+          <Link
+            to={'../page/' + page.toString()}
             onClick={() => {
               props.setActive(page);
               props.getNewData(undefined, page);
@@ -18,7 +20,7 @@ export default function Pagination(props: PaginationProps): JSX.Element {
             key={page}
           >
             {page}
-          </span>
+          </Link>
         )
       )}
       {props.pageNumbers.numbers.includes(props.pageNumbers.last) ? '' : '...'}
