@@ -3,24 +3,29 @@ import { PaginationProps } from '../utils/types';
 import { Link } from 'react-router-dom';
 import { LimitContext } from '../utils/contexts';
 
-export default function Pagination(props: PaginationProps): JSX.Element {
-  const [itemsOnPage, setItemsOnPage] = useState<number>(10);
+export default function Pagination({
+  pageNumbers,
+  activePage,
+  setActive,
+  getNewData,
+}: PaginationProps): JSX.Element {
+  const [itemsOnPage, setItemsOnPage] = useState(10);
   const setLimit: (value: number) => void = useContext(LimitContext);
 
   return (
     <div className="controls">
       <div className="pagination">
-        {props.pageNumbers.numbers.includes(1) ? '' : '...'}
-        {props.pageNumbers.numbers.map(
+        {pageNumbers.numbers.includes(1) ? '' : '...'}
+        {pageNumbers.numbers.map(
           (page): ReactNode => (
             <Link
               to={'../page/' + page.toString()}
               onClick={() => {
-                props.setActive(page);
-                props.getNewData(undefined, page);
+                setActive(page);
+                getNewData(undefined, page);
               }}
               className={
-                page === props.activePage ? 'page-number active' : 'page-number'
+                page === activePage ? 'page-number active' : 'page-number'
               }
               key={page}
             >
@@ -28,9 +33,7 @@ export default function Pagination(props: PaginationProps): JSX.Element {
             </Link>
           )
         )}
-        {props.pageNumbers.numbers.includes(props.pageNumbers.last)
-          ? ''
-          : '...'}
+        {pageNumbers.numbers.includes(pageNumbers.last) ? '' : '...'}
       </div>
       <p>{itemsOnPage}</p>
       <div className="pages-count">
@@ -45,7 +48,7 @@ export default function Pagination(props: PaginationProps): JSX.Element {
             setLimit(+event.target.value);
           }}
           onClick={(): void => {
-            props.getNewData(undefined, 1);
+            getNewData(undefined, 1);
           }}
           className="pages-count-handle"
           type="range"

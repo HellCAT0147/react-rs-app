@@ -6,8 +6,8 @@ import { isGif } from '../utils/type-guards';
 
 export default function DetailedItem(): JSX.Element {
   const [gif, setGif] = useState<DetailedGif>();
-  const [error, setError] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>();
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const id: string | undefined = useParams().id;
   const page: string | undefined = useParams().page;
 

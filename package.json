@@ -8,8 +8,8 @@
     "dev": "vite",
     "format:fix": "prettier . --write",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:es": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "lint:write": "eslint src/ --fix",
+    "lint:check": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint:fix": "eslint src/ --fix",
     "precommit": "npm run lint && npm run type",
     "prepare": "husky install",
     "preview": "vite preview"
@@ -50,7 +50,7 @@
   },
   "lint-staged": {
     "*.(ts|tsx|js|jsx)": [
-      "npm run lint:write",
+      "npm run lint:fix",
       "npm run format:fix",
       "git add"
     ]

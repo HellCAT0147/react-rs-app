@@ -1,9 +1,11 @@
-import { ErrorProps } from '../utils/types';
+interface ErrorProps {
+  msg: string;
+}
 
-export default function APIError(props: ErrorProps): JSX.Element {
+export default function APIError({ msg }: ErrorProps): JSX.Element {
   return (
     <section className="api">
-      <h2>{props.msg}</h2>
+      <h2>{msg}</h2>
     </section>
   );
 }

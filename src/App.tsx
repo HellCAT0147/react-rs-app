@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Search from './components/Search';
-import { BackData, Gif, Pages } from './utils/types';
-import ErrorBoundaryButton from './components/ErrorBoundaryButton';
+import { BackData, IGif, Pages } from './utils/types';
+import ErrorTriggerButton from './components/ErrorTriggerButton';
 import ErrorBoundary from './components/ErrorBoundary';
 import APIError from './components/APIError';
-import APIItems from './components/APIItems';
+import Gifs from './components/Gifs';
 import getAll from './utils/API';
 import { isError, isData } from './utils/type-guards';
 import Pagination from './components/Pagination';
@@ -12,15 +12,13 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { LimitContext } from './utils/contexts';
 
 export default function App(): JSX.Element {
-  const [dataState, setDataState] = useState<Gif[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>('');
-  const [pageNumber, setPageNumber] = useState<number>(
-    Number(useParams().page)
-  );
-  const [limit, setLimit] = useState<number>(10);
+  const [dataState, setDataState] = useState<IGif[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [pageNumber, setPageNumber] = useState(Number(useParams().page));
+  const [limit, setLimit] = useState(10);
   const [pages, setPages] = useState<Pages>({ numbers: [], last: 0 });
-  const [isDetails, setIsDetails] = useState<boolean>(false);
+  const [isDetails, setIsDetails] = useState(false);
   const navigator = useNavigate();
   const params = useParams();
 
@@ -58,7 +56,7 @@ export default function App(): JSX.Element {
     if (isError(response)) {
       showError(response);
     } else if (response !== false && isData(response[0])) {
-      const data: Gif[] = response[0];
+      const data: IGif[] = response[0];
       setPages(response[1]);
 
       setDataState(data);
@@ -71,7 +69,7 @@ export default function App(): JSX.Element {
   return (
     <ErrorBoundary>
       <Search sendQuery={sendQuery} />
-      <ErrorBoundaryButton />
+      <ErrorTriggerButton />
       {errorMsg ? (
         <APIError msg={errorMsg} />
       ) : (
@@ -83,7 +81,7 @@ export default function App(): JSX.Element {
               setIsDetails(false);
             }}
           >
-            <APIItems
+            <Gifs
               isLoading={isLoading}
               data={dataState}
               details={{ isDetails, setIsDetails }}

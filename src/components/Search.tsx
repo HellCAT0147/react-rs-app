@@ -4,13 +4,11 @@ import { useParams } from 'react-router-dom';
 
 export default function Search({ sendQuery }: FindTagProps): JSX.Element {
   const localData: string | null = localStorage.getItem('searchKeys');
-  const [searchResult, setSearchResult] = useState<string>(
+  const [searchResult, setSearchResult] = useState(
     localData || 'Search result'
   );
-  const [searchKeys, setSearchKeys] = useState<string>(localData || '');
-  const [pageNumber, setPageNumber] = useState<number>(
-    Number(useParams().page)
-  );
+  const [searchKeys, setSearchKeys] = useState(localData || '');
+  const [pageNumber, setPageNumber] = useState(Number(useParams().page));
 
   const catchEnter = (key: string): void => {
     if (key === 'Enter') search();

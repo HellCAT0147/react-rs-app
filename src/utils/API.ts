@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BackData, DetailedGif, Gif, Pages } from './types';
+import { BackData, DetailedGif, IGif, Pages } from './types';
 import { hasPagination, isData, isGif } from './type-guards';
 import getPages from './pagination';
 
@@ -29,7 +29,7 @@ export default async function getAll(
         'data' in response.data &&
         isData(response.data.data)
       ) {
-        const data: Gif[] = response.data.data;
+        const data: IGif[] = response.data.data;
         let pages: Pages = { numbers: [], last: 0 };
 
         if (hasPagination(response.data)) {

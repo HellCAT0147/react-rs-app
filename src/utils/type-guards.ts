@@ -1,6 +1,6 @@
-import { Gif, DataWithPagination, DetailedGif } from './types';
+import { IGif, DataWithPagination, DetailedGif } from './types';
 
-export function isData(data: unknown): data is Gif[] {
+export function isData(data: unknown): data is IGif[] {
   if (
     Array.isArray(data) ||
     (typeof data === 'object' && data !== null && 'data' in data)

@@ -1,25 +1,15 @@
-export interface DataProps {
-  data: object[];
-}
-export interface Gif {
+export interface IGif {
   id: string;
   title: string;
   images: IImage;
 }
-export interface DetailedGif extends Gif {
+export interface DetailedGif extends IGif {
   user: User;
   import_datetime: string;
 }
 interface User {
   display_name: string;
   description: string;
-}
-export interface ErrorProps {
-  msg: string;
-}
-export interface APIItemProps {
-  gif: Gif;
-  details: DetailsState;
 }
 export interface IImage {
   original: IImageOriginal;
@@ -40,11 +30,11 @@ export interface PaginationProps {
 }
 export interface PropsPlug {}
 export interface QueryState {
-  data?: Gif[];
+  data?: IGif[];
   isLoading: boolean;
   details: DetailsState;
 }
-interface DetailsState {
+export interface DetailsState {
   isDetails: boolean;
   setIsDetails: (value: boolean) => void;
 }
@@ -52,11 +42,8 @@ export interface SearchState {
   searchKeys: string;
   searchResult: string;
 }
-export interface ErrorState {
-  isError: boolean;
-}
 export interface APIState {
-  APIItems: Gif[];
+  Gifs: IGif[];
 }
 export interface DataWithPagination {
   pagination: Pagination;
@@ -70,4 +57,4 @@ export interface Pages {
   numbers: number[];
   last: number;
 }
-export type BackData = [Gif[], Pages];
+export type BackData = [IGif[], Pages];

@@ -34,6 +34,7 @@
 .api {
   display: flex;
   gap: 20px;
+  justify-content: center;
 }
 
 .api-item {

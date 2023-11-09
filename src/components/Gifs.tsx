@@ -1,24 +1,28 @@
-import APIItem from './APIItem';
-import { QueryState, Gif } from '../utils/types';
+import Gif from './Gif';
+import { QueryState, IGif } from '../utils/types';
 import { useParams } from 'react-router-dom';
 
-export default function APIItems(props: QueryState): JSX.Element {
+export default function Gifs({
+  data,
+  isLoading,
+  details,
+}: QueryState): JSX.Element {
   const isDetails: boolean = !!useParams().id;
-  if (props.isLoading) {
+  if (isLoading) {
     return (
       <section className="api-items">
         <span className="loader"></span>
       </section>
     );
-  } else if (props.data) {
-    const data: Gif[] = props.data;
+  } else if (data) {
+    const localData: IGif[] = data;
     const classes: string =
-      'api-items' + (props.details.isDetails && isDetails ? ' half' : '');
+      'api-items' + (details.isDetails && isDetails ? ' half' : '');
     return (
       <section className={classes}>
-        {data.length ? (
-          data.map((item) => (
-            <APIItem gif={item} key={item.id} details={props.details} />
+        {localData.length ? (
+          localData.map((item) => (
+            <Gif gif={item} key={item.id} details={details} />
           ))
         ) : (
           <h2>Sorry, there is nothing to show you :(</h2>
