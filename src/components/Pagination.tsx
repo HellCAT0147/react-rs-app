@@ -1,7 +1,7 @@
 import { ReactNode, useContext, useState } from 'react';
-import { PaginationProps } from '../utils/types';
+import { IContext, PaginationProps } from '../utils/types';
 import { Link } from 'react-router-dom';
-import { LimitContext } from '../utils/contexts';
+import { Context } from '../utils/contexts';
 
 export default function Pagination({
   pageNumbers,
@@ -10,7 +10,7 @@ export default function Pagination({
   getNewData,
 }: PaginationProps): JSX.Element {
   const [itemsOnPage, setItemsOnPage] = useState(10);
-  const setLimit: (value: number) => void = useContext(LimitContext);
+  const { setLimit } = useContext<IContext>(Context);
 
   return (
     <div className="controls">
@@ -45,7 +45,7 @@ export default function Pagination({
           step={1}
           onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
             setItemsOnPage(+event.target.value);
-            setLimit(+event.target.value);
+            if (setLimit) setLimit(+event.target.value);
           }}
           onClick={(): void => {
             getNewData(undefined, 1);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Search from './components/Search';
 import { BackData, IGif, Pages } from './utils/types';
 import ErrorTriggerButton from './components/ErrorTriggerButton';
@@ -9,16 +9,19 @@ import getAll from './utils/API';
 import { isError, isData } from './utils/type-guards';
 import Pagination from './components/Pagination';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
-import { LimitContext } from './utils/contexts';
+import { Context } from './utils/contexts';
+import { getLastRequest } from './utils/local-storage';
 
 export default function App(): JSX.Element {
-  const [dataState, setDataState] = useState<IGif[]>([]);
+  const [gifs, setGifs] = useState<IGif[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [pageNumber, setPageNumber] = useState(Number(useParams().page));
   const [limit, setLimit] = useState(10);
   const [pages, setPages] = useState<Pages>({ numbers: [], last: 0 });
   const [isDetails, setIsDetails] = useState(false);
+  const [searchKey, setSearchKey] = useState(getLastRequest());
+
   const navigator = useNavigate();
   const params = useParams();
 
@@ -31,8 +34,13 @@ export default function App(): JSX.Element {
     }
   }
 
+  useEffect(() => {
+    sendQuery(searchKey, 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchKey]);
+
   const sendQuery = async (
-    query: string = localStorage.getItem('searchKeys') || '',
+    query: string = searchKey,
     toPage?: number
   ): Promise<void> => {
     if (toPage) setPageNumber(toPage);
@@ -58,44 +66,45 @@ export default function App(): JSX.Element {
     } else if (response !== false && isData(response[0])) {
       const data: IGif[] = response[0];
       setPages(response[1]);
-
-      setDataState(data);
+      setGifs(data);
     } else {
       showError();
     }
+
     setIsLoading(false);
   };
 
   return (
     <ErrorBoundary>
-      <Search sendQuery={sendQuery} />
-      <ErrorTriggerButton />
-      {errorMsg ? (
-        <APIError msg={errorMsg} />
-      ) : (
-        <LimitContext.Provider value={setLimit}>
-          <div
-            className="api"
-            onClick={(): void => {
-              navigator('../page/' + pageNumber);
-              setIsDetails(false);
-            }}
-          >
-            <Gifs
-              isLoading={isLoading}
-              data={dataState}
-              details={{ isDetails, setIsDetails }}
+      <Context.Provider value={{ setLimit, setSearchKey, gifs, searchKey }}>
+        <Search />
+        <ErrorTriggerButton />
+        {errorMsg ? (
+          <APIError msg={errorMsg} />
+        ) : (
+          <>
+            <div
+              className="api"
+              onClick={(): void => {
+                navigator('../page/' + pageNumber);
+                setIsDetails(false);
+              }}
+            >
+              <Gifs
+                isLoading={isLoading}
+                details={{ isDetails, setIsDetails }}
+              />
+              <Outlet />
+            </div>
+            <Pagination
+              pageNumbers={pages}
+              activePage={pageNumber}
+              setActive={setPageNumber}
+              getNewData={sendQuery}
             />
-            <Outlet />
-          </div>
-          <Pagination
-            pageNumbers={pages}
-            activePage={pageNumber}
-            setActive={setPageNumber}
-            getNewData={sendQuery}
-          />
-        </LimitContext.Provider>
-      )}
+          </>
+        )}
+      </Context.Provider>
     </ErrorBoundary>
   );
 }

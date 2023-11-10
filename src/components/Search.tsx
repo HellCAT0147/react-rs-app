@@ -1,35 +1,30 @@
-import { useEffect, useState } from 'react';
-import { FindTagProps } from '../utils/types';
-import { useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Context } from '../utils/contexts';
+import { IContext } from '../utils/types';
+import { setRequest } from '../utils/local-storage';
 
-export default function Search({ sendQuery }: FindTagProps): JSX.Element {
-  const localData: string | null = localStorage.getItem('searchKeys');
-  const [searchResult, setSearchResult] = useState(
-    localData || 'Search result'
-  );
-  const [searchKeys, setSearchKeys] = useState(localData || '');
-  const [pageNumber, setPageNumber] = useState(Number(useParams().page));
+export default function Search(): JSX.Element {
+  const { searchKey, setSearchKey } = useContext<IContext>(Context);
+  const [tempSearchKey, setTempSearchKey] = useState(searchKey || '');
 
   const catchEnter = (key: string): void => {
     if (key === 'Enter') search();
   };
 
   const search = async (): Promise<void> => {
-    const cleanQuery: string = searchKeys.trim();
-    setSearchResult(cleanQuery);
-    localStorage.setItem('searchKeys', cleanQuery);
-
-    setPageNumber(1);
-    sendQuery(cleanQuery, pageNumber);
+    const cleanQuery: string = tempSearchKey.trim();
+    setRequest(cleanQuery);
+    if (setSearchKey) setSearchKey(cleanQuery);
   };
 
   useEffect((): void => {
     search();
+    if (searchKey && setSearchKey) setSearchKey(searchKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const typing = (text: string): void => {
-    setSearchKeys(text);
+    setTempSearchKey(text);
   };
 
   return (
@@ -39,12 +34,14 @@ export default function Search({ sendQuery }: FindTagProps): JSX.Element {
         type="text"
         onChange={(event) => typing(event.target.value)}
         onKeyDown={(event) => catchEnter(event.key)}
-        value={searchKeys}
+        value={tempSearchKey}
       />
       <button className="send-button" onClick={search}>
         Search
       </button>
-      <h1 className="query">{searchResult.toUpperCase()}</h1>
+      <h1 className="query">
+        {searchKey ? searchKey.toUpperCase() : 'Trending'}
+      </h1>
     </section>
   );
 }

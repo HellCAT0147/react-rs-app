@@ -19,31 +19,19 @@ export interface IImageOriginal {
   mp4: string;
   url: string;
 }
-export interface FindTagProps {
-  sendQuery: (query: string, page: number) => void;
-}
 export interface PaginationProps {
   pageNumbers: Pages;
   activePage: number;
   setActive: (value: number) => void;
   getNewData: (query: undefined, toPage: number) => Promise<void>;
 }
-export interface PropsPlug {}
 export interface QueryState {
-  data?: IGif[];
   isLoading: boolean;
   details: DetailsState;
 }
 export interface DetailsState {
   isDetails: boolean;
   setIsDetails: (value: boolean) => void;
-}
-export interface SearchState {
-  searchKeys: string;
-  searchResult: string;
-}
-export interface APIState {
-  Gifs: IGif[];
 }
 export interface DataWithPagination {
   pagination: Pagination;
@@ -58,3 +46,10 @@ export interface Pages {
   last: number;
 }
 export type BackData = [IGif[], Pages];
+export interface IContext {
+  setLimit?: (value: number) => void;
+  searchKey?: string;
+  setSearchKey?: (value: string) => void;
+  gifs?: IGif[];
+  setGifs?: (value: IGif[]) => void;
+}
