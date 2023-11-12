@@ -42,7 +42,7 @@ export default function DetailedItem(): JSX.Element {
         className="detailed-item"
         data-testid="detailed-item"
       >
-        <Link to={'../../page/' + page} className="close">
+        <Link to={'../../page/' + page} className="close" data-testid="close">
           +
         </Link>
         <h2>{gif.title}</h2>
