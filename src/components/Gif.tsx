@@ -11,6 +11,7 @@ export default function Gif({ gif, details }: GifProps): JSX.Element {
     <Link
       to={'details/' + gif.id}
       className="api-item"
+      data-testid="gif"
       onClick={(
         event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
       ): void => {

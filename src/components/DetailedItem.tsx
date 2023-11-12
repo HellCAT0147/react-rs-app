@@ -40,8 +40,9 @@ export default function DetailedItem(): JSX.Element {
           event.stopPropagation()
         }
         className="detailed-item"
+        data-testid="detailed-item"
       >
-        <Link to={'../../page/' + page} className="close" onClick={() => {}}>
+        <Link to={'../../page/' + page} className="close">
           +
         </Link>
         <h2>{gif.title}</h2>

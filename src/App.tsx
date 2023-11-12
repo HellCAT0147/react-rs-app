@@ -12,7 +12,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Context } from './utils/contexts';
 import { getLastRequest } from './utils/local-storage';
 
-export default function App(): JSX.Element {
+const App: React.FC = () => {
   const [gifs, setGifs] = useState<IGif[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -76,7 +76,7 @@ export default function App(): JSX.Element {
 
   return (
     <ErrorBoundary>
-      <Context.Provider value={{ setLimit, setSearchKey, gifs, searchKey }}>
+      <Context.Provider value={{ setLimit, gifs, searchKey, setSearchKey }}>
         <Search />
         <ErrorTriggerButton />
         {errorMsg ? (
@@ -107,4 +107,6 @@ export default function App(): JSX.Element {
       </Context.Provider>
     </ErrorBoundary>
   );
-}
+};
+
+export default App;

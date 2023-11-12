@@ -12,11 +12,14 @@ interface User {
   description: string;
 }
 export interface IImage {
-  original: IImageOriginal;
-  fixed_width_small_still: IImageOriginal;
+  original: ImageOriginal;
+  fixed_width_small_still: ImageSmall;
 }
-export interface IImageOriginal {
+export interface ImageOriginal {
   mp4: string;
+  url: string;
+}
+export interface ImageSmall {
   url: string;
 }
 export interface PaginationProps {
@@ -51,5 +54,4 @@ export interface IContext {
   searchKey?: string;
   setSearchKey?: (value: string) => void;
   gifs?: IGif[];
-  setGifs?: (value: IGif[]) => void;
 }
