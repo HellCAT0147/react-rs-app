@@ -28,6 +28,7 @@ export default function Pagination({
                 page === activePage ? 'page-number active' : 'page-number'
               }
               key={page}
+              data-testid="page-number"
             >
               {page}
             </Link>
