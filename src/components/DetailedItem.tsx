@@ -29,7 +29,7 @@ export default function DetailedItem(): JSX.Element {
 
   if (isLoading) {
     return (
-      <div className="detailed-item loading">
+      <div className="detailed-item loading" data-testid="loading">
         <span className="loader bigger"></span>
       </div>
     );
