@@ -68,7 +68,7 @@ export default function DetailedItem(): JSX.Element {
         }
         className="detailed-item"
       >
-        <Link to={'../../page/' + page} className="close" onClick={() => {}}>
+        <Link to={'../../page/' + page} className="close">
           +
         </Link>
         {error}

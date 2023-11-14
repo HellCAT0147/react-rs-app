@@ -16,7 +16,7 @@ beforeEach(() => {
   mockAxios
     .onGet('https://api.giphy.com/v1/gifs/trending')
     .reply(200, mockResponse);
-  mockAxios.onAny().reply(200, mockResponseWithId);
+  mockAxios.onGet(/.*JIX9t2j0ZTN9S.*/).reply(200, mockResponseWithId);
 });
 
 afterEach(() => {
@@ -75,5 +75,23 @@ describe('Tests for the Detailed Card component:', () => {
       fireEvent.click(closeButton);
     });
     expect(screen.queryByTestId('detailed-item')).toBeNull();
+  });
+
+  test('Request to undefined gif returns an error.', async () => {
+    render(
+      <MemoryRouter initialEntries={['/page/1/details/asd']}>
+        <Routes>
+          <Route path="/" element={<Navigate to="/page/1" />} />
+          <Route path="/page/:page/" element={<App />}>
+            <Route path="details/:id" element={<DetailedItem />} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText('Request failed with status code 404')
+    ).toBeDefined();
+    expect(screen.queryByText('Empty fake request')).toBeNull();
   });
 });
