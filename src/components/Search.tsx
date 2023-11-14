@@ -35,8 +35,13 @@ export default function Search(): JSX.Element {
         onChange={(event) => typing(event.target.value)}
         onKeyDown={(event) => catchEnter(event.key)}
         value={tempSearchKey}
+        data-testid="search-input"
       />
-      <button className="send-button" onClick={search}>
+      <button
+        className="send-button"
+        onClick={search}
+        data-testid="search-button"
+      >
         Search
       </button>
       <h1 className="query">

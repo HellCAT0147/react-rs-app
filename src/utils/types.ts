@@ -55,3 +55,6 @@ export interface IContext {
   setSearchKey?: (value: string) => void;
   gifs?: IGif[];
 }
+export interface ErrorState {
+  isError: boolean;
+}
