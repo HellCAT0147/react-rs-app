@@ -28,14 +28,6 @@ export interface PaginationProps {
   setActive: (value: number) => void;
   getNewData: (query: undefined, toPage: number) => Promise<void>;
 }
-export interface QueryState {
-  isLoading: boolean;
-  details: DetailsState;
-}
-export interface DetailsState {
-  isDetails: boolean;
-  setIsDetails: (value: boolean) => void;
-}
 export interface DataWithPagination {
   pagination: Pagination;
 }

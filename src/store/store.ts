@@ -1,8 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import searchReducer from './reducers/SearchSlice';
+import gifReducer from './reducers/GifSlice';
 
 const rootReducer = combineReducers({
-  searchReducer,
+  gifReducer,
 });
 
 export const setupStore = () => {

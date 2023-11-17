@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom';
-import { DetailsState, IGif } from '../utils/types';
+import { IGif } from '../utils/types';
+import { useAppDispatch } from '../hooks/redux';
+import { gifSlice } from '../store/reducers/GifSlice';
 
 interface GifProps {
   gif: IGif;
-  details: DetailsState;
 }
 
-export default function Gif({ gif, details }: GifProps): JSX.Element {
+export default function Gif({ gif }: GifProps): JSX.Element {
+  const { setDetailsMode } = gifSlice.actions;
+  const dispatch = useAppDispatch();
   return (
     <Link
       to={'details/' + gif.id}
@@ -16,7 +19,7 @@ export default function Gif({ gif, details }: GifProps): JSX.Element {
         event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
       ): void => {
         event.stopPropagation();
-        details.setIsDetails(true);
+        dispatch(setDetailsMode(true));
       }}
     >
       <h3 className="item-title">{gif.title}</h3>

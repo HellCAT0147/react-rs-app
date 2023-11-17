@@ -10,34 +10,24 @@ import { isError, isData } from './utils/type-guards';
 import Pagination from './components/Pagination';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Context } from './utils/contexts';
-import { getLastRequest } from './utils/local-storage';
-import { useAppSelector } from './hooks/redux';
+import { useAppDispatch, useAppSelector } from './hooks/redux';
+import { gifSlice } from './store/reducers/GifSlice';
+import Constants from './utils/constants';
 
 const App: React.FC = () => {
-  const { searchKeyFromStorage } = useAppSelector(
-    (state) => state.searchReducer
+  const { searchKeyFromStorage, error } = useAppSelector(
+    (state) => state.gifReducer
   );
+  const { setError, setGifsLoading, setDetailsMode } = gifSlice.actions;
+  const dispatch = useAppDispatch();
 
   const [gifs, setGifs] = useState<IGif[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
   const [pageNumber, setPageNumber] = useState(Number(useParams().page));
   const [limit, setLimit] = useState(10);
   const [pages, setPages] = useState<Pages>({ numbers: [], last: 0 });
-  const [isDetails, setIsDetails] = useState(false);
-  const [searchKey, setSearchKey] = useState(getLastRequest());
 
   const navigator = useNavigate();
   const params = useParams();
-
-  function showError(error?: Error): void {
-    if (error) {
-      console.error(error.message);
-      setErrorMsg(error.message);
-    } else {
-      setErrorMsg('Server error :( ... Try to visit this app next day :)');
-    }
-  }
 
   useEffect(() => {
     sendQuery(searchKeyFromStorage, 1);
@@ -49,15 +39,15 @@ const App: React.FC = () => {
     toPage?: number
   ): Promise<void> => {
     if (toPage) setPageNumber(toPage);
-    setIsLoading(true);
-    setErrorMsg('');
-    setIsDetails(false);
+    dispatch(setGifsLoading(true));
+    dispatch(setError(''));
 
     if ('id' in params) {
       navigator('/page/' + toPage + '/details/' + params.id);
-      setIsDetails(true);
+      dispatch(setDetailsMode(true));
     } else {
       navigator('/page/' + toPage);
+      dispatch(setDetailsMode(false));
     }
 
     const response: BackData | Error | false = await getAll(
@@ -66,39 +56,33 @@ const App: React.FC = () => {
       limit
     );
 
-    if (isError(response)) {
-      showError(response);
-    } else if (response !== false && isData(response[0])) {
+    if (isError(response)) dispatch(setError(response.message));
+    else if (response !== false && isData(response[0])) {
       const data: IGif[] = response[0];
       setPages(response[1]);
       setGifs(data);
-    } else {
-      showError();
-    }
+    } else dispatch(setError(Constants.DEFAULT_ERROR_MESSAGE));
 
-    setIsLoading(false);
+    dispatch(setGifsLoading(false));
   };
 
   return (
     <ErrorBoundary>
-      <Context.Provider value={{ setLimit, gifs, searchKey, setSearchKey }}>
+      <Context.Provider value={{ setLimit, gifs }}>
         <Search />
         <ErrorTriggerButton />
-        {errorMsg ? (
-          <APIError msg={errorMsg} />
+        {error ? (
+          <APIError />
         ) : (
           <>
             <div
               className="api"
               onClick={(): void => {
                 navigator('../page/' + pageNumber);
-                setIsDetails(false);
+                dispatch(setDetailsMode(false));
               }}
             >
-              <Gifs
-                isLoading={isLoading}
-                details={{ isDetails, setIsDetails }}
-              />
+              <Gifs />
               <Outlet />
             </div>
             <Pagination

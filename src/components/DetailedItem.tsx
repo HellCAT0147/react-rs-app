@@ -3,16 +3,21 @@ import { getOne } from '../utils/API';
 import { useEffect, useState } from 'react';
 import { DetailedGif } from '../utils/types';
 import { isGif } from '../utils/type-guards';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { gifSlice } from '../store/reducers/GifSlice';
 
-export default function DetailedItem(): JSX.Element {
+const DetailedItem: React.FC = () => {
+  const { isLoadingGif } = useAppSelector((state) => state.gifReducer);
+  const { setGifLoading } = gifSlice.actions;
+  const dispatch = useAppDispatch();
+
   const [gif, setGif] = useState<DetailedGif>();
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const id: string | undefined = useParams().id;
   const page: string | undefined = useParams().page;
 
   async function showDetails(id: string): Promise<void> {
-    setIsLoading(true);
+    if (!isLoadingGif) dispatch(setGifLoading(true));
     const response: false | DetailedGif | Error = await getOne(id);
     if (response === false) {
       setError('Server error :( ... Try to change gif :)');
@@ -20,14 +25,16 @@ export default function DetailedItem(): JSX.Element {
       setError('');
       setGif(response);
     } else setError(response.message);
-    setIsLoading(false);
+
+    dispatch(setGifLoading(false));
   }
 
   useEffect(() => {
     if (id) showDetails(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  if (isLoading) {
+  if (isLoadingGif) {
     return (
       <div className="detailed-item loading" data-testid="loading">
         <span className="loader bigger"></span>
@@ -75,4 +82,6 @@ export default function DetailedItem(): JSX.Element {
       </div>
     );
   }
-}
+};
+
+export default DetailedItem;

@@ -1,14 +1,18 @@
 import Gif from './Gif';
-import { QueryState } from '../utils/types';
 import { useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import { Context } from '../utils/contexts';
+import { useAppSelector } from '../hooks/redux';
 
-export default function Gifs({ isLoading, details }: QueryState): JSX.Element {
+const Gifs: React.FC = () => {
+  const { isLoadingGifs, isDetailsOpen } = useAppSelector(
+    (state) => state.gifReducer
+  );
+
   const isDetails: boolean = !!useParams().id;
   const { gifs } = useContext(Context);
 
-  if (isLoading)
+  if (isLoadingGifs)
     return (
       <section className="api-items">
         <span className="loader"></span>
@@ -17,11 +21,11 @@ export default function Gifs({ isLoading, details }: QueryState): JSX.Element {
 
   if (gifs) {
     const classes: string =
-      'api-items' + (details.isDetails && isDetails ? ' half' : '');
+      'api-items' + (isDetailsOpen && isDetails ? ' half' : '');
     return (
       <section className={classes}>
         {gifs.length ? (
-          gifs.map((item) => <Gif gif={item} key={item.id} details={details} />)
+          gifs.map((item) => <Gif gif={item} key={item.id} />)
         ) : (
           <h2>Sorry, there is nothing to show you :(</h2>
         )}
@@ -30,4 +34,5 @@ export default function Gifs({ isLoading, details }: QueryState): JSX.Element {
   }
 
   return <section className="api-items">Unexpected error</section>;
-}
+};
+export default Gifs;

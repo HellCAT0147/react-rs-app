@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { setRequest } from '../utils/local-storage';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { searchSlice } from '../store/reducers/SearchSlice';
+import { gifSlice } from '../store/reducers/GifSlice';
 
 export default function Search(): JSX.Element {
-  const { searchKeyFromStorage } = useAppSelector(
-    (state) => state.searchReducer
-  );
-  const { setSearchKeyForStorage } = searchSlice.actions;
+  const { searchKeyFromStorage } = useAppSelector((state) => state.gifReducer);
+  const { setSearchKeyForStorage } = gifSlice.actions;
   const dispatch = useAppDispatch();
 
   const [tempSearchKey, setTempSearchKey] = useState(
