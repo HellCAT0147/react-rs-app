@@ -3,6 +3,7 @@ export function getLastRequest(): string {
   if (localData) return localData;
   return '';
 }
+
 export function setRequest(request: string): void {
   localStorage.setItem('searchKeys', request);
 }

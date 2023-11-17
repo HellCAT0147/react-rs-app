@@ -1,11 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
-import { Context } from '../utils/contexts';
-import { IContext } from '../utils/types';
+import { useEffect, useState } from 'react';
 import { setRequest } from '../utils/local-storage';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { searchSlice } from '../store/reducers/SearchSlice';
 
 export default function Search(): JSX.Element {
-  const { searchKey, setSearchKey } = useContext<IContext>(Context);
-  const [tempSearchKey, setTempSearchKey] = useState(searchKey || '');
+  const { searchKeyFromStorage } = useAppSelector(
+    (state) => state.searchReducer
+  );
+  const { setSearchKeyForStorage } = searchSlice.actions;
+  const dispatch = useAppDispatch();
+
+  const [tempSearchKey, setTempSearchKey] = useState(
+    searchKeyFromStorage || ''
+  );
 
   const catchEnter = (key: string): void => {
     if (key === 'Enter') search();
@@ -14,12 +21,11 @@ export default function Search(): JSX.Element {
   const search = async (): Promise<void> => {
     const cleanQuery: string = tempSearchKey.trim();
     setRequest(cleanQuery);
-    if (setSearchKey) setSearchKey(cleanQuery);
+    dispatch(setSearchKeyForStorage(cleanQuery));
   };
 
   useEffect((): void => {
     search();
-    if (searchKey && setSearchKey) setSearchKey(searchKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,9 +50,7 @@ export default function Search(): JSX.Element {
       >
         Search
       </button>
-      <h1 className="query">
-        {searchKey ? searchKey.toUpperCase() : 'Trending'}
-      </h1>
+      <h1 className="query">{searchKeyFromStorage.toUpperCase()}</h1>
     </section>
   );
 }

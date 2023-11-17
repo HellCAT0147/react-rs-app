@@ -11,8 +11,13 @@ import Pagination from './components/Pagination';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Context } from './utils/contexts';
 import { getLastRequest } from './utils/local-storage';
+import { useAppSelector } from './hooks/redux';
 
 const App: React.FC = () => {
+  const { searchKeyFromStorage } = useAppSelector(
+    (state) => state.searchReducer
+  );
+
   const [gifs, setGifs] = useState<IGif[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -35,12 +40,12 @@ const App: React.FC = () => {
   }
 
   useEffect(() => {
-    sendQuery(searchKey, 1);
+    sendQuery(searchKeyFromStorage, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchKey]);
+  }, [searchKeyFromStorage]);
 
   const sendQuery = async (
-    query: string = searchKey,
+    query: string = searchKeyFromStorage,
     toPage?: number
   ): Promise<void> => {
     if (toPage) setPageNumber(toPage);
