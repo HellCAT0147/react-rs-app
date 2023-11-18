@@ -1,3 +1,7 @@
+export interface DataField {
+  data: IGif[];
+  pagination: Pagination;
+}
 export interface IGif {
   id: string;
   title: string;
@@ -22,15 +26,6 @@ export interface ImageOriginal {
 export interface ImageSmall {
   url: string;
 }
-export interface PaginationProps {
-  pageNumbers: Pages;
-  activePage: number;
-  setActive: (value: number) => void;
-  getNewData: (query: undefined, toPage: number) => Promise<void>;
-}
-export interface DataWithPagination {
-  pagination: Pagination;
-}
 interface Pagination {
   count: number;
   offset: number;
@@ -41,12 +36,9 @@ export interface Pages {
   last: number;
 }
 export type BackData = [IGif[], Pages];
-export interface IContext {
-  setLimit?: (value: number) => void;
-  searchKey?: string;
-  setSearchKey?: (value: string) => void;
-  gifs?: IGif[];
-}
 export interface ErrorState {
   isError: boolean;
+}
+export interface ValueOwner {
+  value: string;
 }

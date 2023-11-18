@@ -4,13 +4,11 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { gifSlice } from '../store/reducers/GifSlice';
 
 export default function Search(): JSX.Element {
-  const { searchKeyFromStorage } = useAppSelector((state) => state.gifReducer);
-  const { setSearchKeyForStorage } = gifSlice.actions;
+  const { searchKey } = useAppSelector((state) => state.gifReducer);
+  const { setSearchKey } = gifSlice.actions;
   const dispatch = useAppDispatch();
 
-  const [tempSearchKey, setTempSearchKey] = useState(
-    searchKeyFromStorage || ''
-  );
+  const [tempSearchKey, setTempSearchKey] = useState(searchKey || '');
 
   const catchEnter = (key: string): void => {
     if (key === 'Enter') search();
@@ -19,7 +17,7 @@ export default function Search(): JSX.Element {
   const search = async (): Promise<void> => {
     const cleanQuery: string = tempSearchKey.trim();
     setRequest(cleanQuery);
-    dispatch(setSearchKeyForStorage(cleanQuery));
+    dispatch(setSearchKey(cleanQuery));
   };
 
   useEffect((): void => {
@@ -48,7 +46,7 @@ export default function Search(): JSX.Element {
       >
         Search
       </button>
-      <h1 className="query">{searchKeyFromStorage.toUpperCase()}</h1>
+      <h1 className="query">{searchKey.toUpperCase()}</h1>
     </section>
   );
 }

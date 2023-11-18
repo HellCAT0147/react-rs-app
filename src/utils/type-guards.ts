@@ -1,4 +1,4 @@
-import { IGif, DataWithPagination, DetailedGif } from './types';
+import { IGif, DetailedGif, DataField, ValueOwner } from './types';
 
 export function isData(data: unknown): data is IGif[] {
   if (
@@ -15,13 +15,22 @@ export function isError(error: unknown): error is Error {
   return false;
 }
 
-export function hasPagination(
-  something: unknown
-): something is DataWithPagination {
+export function hasPagination(something: unknown): something is DataField {
   if (
     typeof something === 'object' &&
     something !== null &&
-    'pagination' in something
+    'pagination' in something &&
+    'data' in something
+  )
+    return true;
+  return false;
+}
+
+export function hasValueField(something: unknown): something is ValueOwner {
+  if (
+    typeof something === 'object' &&
+    something !== null &&
+    'value' in something
   )
     return true;
   return false;

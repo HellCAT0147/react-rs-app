@@ -1,31 +1,30 @@
-import { ReactNode, useContext, useState } from 'react';
-import { IContext, PaginationProps } from '../utils/types';
+import { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Context } from '../utils/contexts';
+import { gifSlice } from '../store/reducers/GifSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { hasValueField } from '../utils/type-guards';
 
-export default function Pagination({
-  pageNumbers,
-  activePage,
-  setActive,
-  getNewData,
-}: PaginationProps): JSX.Element {
-  const [itemsOnPage, setItemsOnPage] = useState(10);
-  const { setLimit } = useContext<IContext>(Context);
+export default function Pagination(): JSX.Element {
+  const { pages, currentPage, gifsPerPage } = useAppSelector(
+    (state) => state.gifReducer
+  );
+  const { setGifsPerPage, setCurrentPage } = gifSlice.actions;
+  const dispatch = useAppDispatch();
+  const [tempGifsPerPage, setTempGifsPerPage] = useState(gifsPerPage);
 
   return (
     <div className="controls">
       <div className="pagination">
-        {pageNumbers.numbers.includes(1) ? '' : '...'}
-        {pageNumbers.numbers.map(
+        {pages.numbers.includes(1) ? '' : '...'}
+        {pages.numbers.map(
           (page): ReactNode => (
             <Link
               to={'../page/' + page.toString()}
               onClick={() => {
-                setActive(page);
-                getNewData(undefined, page);
+                dispatch(setCurrentPage(page));
               }}
               className={
-                page === activePage ? 'page-number active' : 'page-number'
+                page === currentPage ? 'page-number active' : 'page-number'
               }
               key={page}
               data-testid="page-number"
@@ -34,22 +33,21 @@ export default function Pagination({
             </Link>
           )
         )}
-        {pageNumbers.numbers.includes(pageNumbers.last) ? '' : '...'}
+        {pages.numbers.includes(pages.last) ? '' : '...'}
       </div>
-      <p>{itemsOnPage}</p>
+      <p>{tempGifsPerPage}</p>
       <div className="pages-count">
         10
         <input
-          value={itemsOnPage}
+          value={tempGifsPerPage}
           min={10}
           max={50}
           step={1}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-            setItemsOnPage(+event.target.value);
-            if (setLimit) setLimit(+event.target.value);
+          onChange={({ target }): void => {
+            if (hasValueField(target)) setTempGifsPerPage(+target.value);
           }}
           onClick={(): void => {
-            getNewData(undefined, 1);
+            dispatch(setGifsPerPage(tempGifsPerPage));
           }}
           className="pages-count-handle"
           type="range"

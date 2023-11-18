@@ -1,16 +1,13 @@
 import Gif from './Gif';
 import { useParams } from 'react-router-dom';
-import { useContext } from 'react';
-import { Context } from '../utils/contexts';
 import { useAppSelector } from '../hooks/redux';
 
 const Gifs: React.FC = () => {
-  const { isLoadingGifs, isDetailsOpen } = useAppSelector(
+  const { isLoadingGifs, isDetailsOpen, gifs } = useAppSelector(
     (state) => state.gifReducer
   );
 
   const isDetails: boolean = !!useParams().id;
-  const { gifs } = useContext(Context);
 
   if (isLoadingGifs)
     return (
