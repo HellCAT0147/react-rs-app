@@ -1,13 +1,10 @@
 import Gif from './Gif';
-import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../hooks/redux';
 
 const Gifs: React.FC = () => {
   const { isLoadingGifs, isDetailsOpen, gifs } = useAppSelector(
     (state) => state.gifReducer
   );
-
-  const isDetails: boolean = !!useParams().id;
 
   if (isLoadingGifs)
     return (
@@ -17,8 +14,7 @@ const Gifs: React.FC = () => {
     );
 
   if (gifs) {
-    const classes: string =
-      'api-items' + (isDetailsOpen && isDetails ? ' half' : '');
+    const classes: string = 'api-items' + (isDetailsOpen ? ' half' : '');
     return (
       <section className={classes}>
         {gifs.length ? (

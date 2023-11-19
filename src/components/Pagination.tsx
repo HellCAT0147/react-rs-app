@@ -10,6 +10,7 @@ export default function Pagination(): JSX.Element {
   );
   const { setGifsPerPage, setCurrentPage } = gifSlice.actions;
   const dispatch = useAppDispatch();
+
   const [tempGifsPerPage, setTempGifsPerPage] = useState(gifsPerPage);
 
   return (

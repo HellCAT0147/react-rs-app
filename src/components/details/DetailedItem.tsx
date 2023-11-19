@@ -85,7 +85,11 @@ const DetailedItem: React.FC = () => {
         }
         className="detailed-item"
       >
-        <Link to={'../../page/' + page} className="close">
+        <Link
+          to={'../../page/' + page}
+          className="close"
+          onClick={() => dispatch(setDetailsMode(false))}
+        >
           +
         </Link>
         <p className="api-error">{gifError}</p>

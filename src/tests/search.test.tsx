@@ -1,33 +1,30 @@
 import { render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, test } from 'vitest';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import App from '../App';
 import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
 import { mockResponse } from './helpers/mockRequest';
-import { mockResponseWithId } from './helpers/mockRequestWithId';
 import Search from '../components/Search';
 import userEvent from '@testing-library/user-event';
+import createFetchMock, { FetchMock } from 'vitest-fetch-mock';
+import { store } from '../store/store';
+import { Provider } from 'react-redux';
 
-const mockAxios = new MockAdapter(axios);
+const fetchMock: FetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
 
-beforeEach(() => {
-  mockAxios
-    .onGet('https://api.giphy.com/v1/gifs/trending')
-    .reply(200, mockResponse);
-  mockAxios.onAny().reply(200, mockResponseWithId);
-});
-
-afterEach(() => {
-  mockAxios.resetHistory();
+beforeEach((): void => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponse(JSON.stringify(mockResponse));
 });
 
 describe('Tests for the Search component:', () => {
   test('Verify that clicking the Search button saves the entered value to the local storage.', async () => {
     render(
       <MemoryRouter>
-        <Search />
+        <Provider store={store}>
+          <Search />
+        </Provider>
       </MemoryRouter>
     );
 
@@ -47,7 +44,9 @@ describe('Tests for the Search component:', () => {
 
     render(
       <MemoryRouter>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </MemoryRouter>
     );
 

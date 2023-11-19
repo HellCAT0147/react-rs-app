@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { getLastRequest } from '../../utils/local-storage';
 import { DetailedGif, IGif, Pages } from '../../utils/types';
+import Constants from '../../utils/constants';
 
 interface GifState {
   searchKey: string;
@@ -23,7 +24,7 @@ const initialState: GifState = {
   isLoadingGifs: true,
   isLoadingGif: true,
   isDetailsOpen: false,
-  gifsPerPage: 10,
+  gifsPerPage: Constants.DEFAULT_LIMIT,
   gif: null,
   gifs: [],
   pages: { numbers: [], last: 0 },
@@ -69,66 +70,6 @@ export const gifSlice = createSlice({
       state.pages = action.payload;
     },
   },
-  // extraReducers: (builder) => {
-  //   // [fetchGifs.pending.type]: (state: GifState): void => {
-  //   //   state.isLoadingGifs = true;
-  //   // },
-  //   // [fetchGifs.fulfilled.type]: (
-  //   //   state: GifState,
-  //   //   action: PayloadAction<DataField>
-  //   // ): void => {
-  //   //   state.isLoadingGifs = false;
-  //   //   state.error = '';
-  //   //   state.gifs = action.payload.data;
-  //   //   const totalNumberOfPages: number = action.payload.pagination.total_count;
-  //   //   const maxAPIOffset = 5000;
-  //   //   state.pages = getPages(
-  //   //     Math.ceil(
-  //   //       (totalNumberOfPages > maxAPIOffset
-  //   //         ? maxAPIOffset
-  //   //         : totalNumberOfPages) / state.gifsPerPage
-  //   //     ),
-  //   //     state.currentPage || 1
-  //   //   );
-  //   // },
-  //   // [fetchGifs.rejected.type]: (
-  //   //   state: GifState,
-  //   //   action: PayloadAction<string>
-  //   // ): void => {
-  //   //   state.isLoadingGifs = false;
-  //   //   state.error = action.payload;
-  //   // },
-  //   // builder
-  //   //   .addCase(fetchGifs.pending.type, (state: GifState) => {
-  //   //     state.isLoadingGifs = true;
-  //   //   })
-  //   //   .addCase(
-  //   //     fetchGifs.fulfilled.type,
-  //   //     (state: GifState, action: PayloadAction<DataField>) => {
-  //   //       state.isLoadingGifs = false;
-  //   //       state.error = '';
-  //   //       state.gifs = action.payload.data;
-  //   //       const totalNumberOfPages: number =
-  //   //         action.payload.pagination.total_count;
-  //   //       const maxAPIOffset = 5000;
-  //   //       state.pages = getPages(
-  //   //         Math.ceil(
-  //   //           (totalNumberOfPages > maxAPIOffset
-  //   //             ? maxAPIOffset
-  //   //             : totalNumberOfPages) / state.gifsPerPage
-  //   //         ),
-  //   //         state.currentPage || 1
-  //   //       );
-  //   //     }
-  //   //   )
-  //   //   .addCase(
-  //   //     fetchGifs.rejected.type,
-  //   //     (state: GifState, action: PayloadAction<string>) => {
-  //   //       state.isLoadingGifs = false;
-  //   //       state.error = action.payload;
-  //   //     }
-  //   //   );
-  // },
 });
 
 export default gifSlice.reducer;

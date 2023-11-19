@@ -37,7 +37,9 @@ const App: React.FC = () => {
       ? {
           query: searchKey,
           limit: gifsPerPage,
-          offset: currentPage ? (currentPage - 1) * gifsPerPage : 0,
+          offset: currentPage
+            ? (currentPage - 1) * gifsPerPage
+            : Constants.DEFAULT_OFFSET,
         }
       : skipToken
   );

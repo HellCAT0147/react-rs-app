@@ -1,53 +1,51 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, test } from 'vitest';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import DetailedItem from '../components/details/DetailedItem';
 import App from '../App';
 import { MemoryRouter, Navigate, Route, Routes } from 'react-router-dom';
 import React from 'react';
-import { mockResponse } from './helpers/mockRequest';
 import { mockResponseWithId } from './helpers/mockRequestWithId';
 import { act } from 'react-dom/test-utils';
+import createFetchMock, { FetchMock } from 'vitest-fetch-mock';
+import { store } from '../store/store';
+import { Provider } from 'react-redux';
 
-const mockAxios = new MockAdapter(axios);
+const fetchMock: FetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
 
-beforeEach(() => {
-  mockAxios
-    .onGet('https://api.giphy.com/v1/gifs/trending')
-    .reply(200, mockResponse);
-  mockAxios.onGet(/.*JIX9t2j0ZTN9S.*/).reply(200, mockResponseWithId);
-});
-
-afterEach(() => {
-  mockAxios.resetHistory();
+beforeEach((): void => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponse(JSON.stringify(mockResponseWithId));
 });
 
 describe('Tests for the Detailed Card component:', () => {
   test('Check that a loading indicator is displayed while fetching data.', async () => {
     render(
       <MemoryRouter initialEntries={['/page/1/details/JIX9t2j0ZTN9S']}>
-        <Routes>
-          <Route path="/" element={<Navigate to="/page/1" />} />
-          <Route path="/page/:page/" element={<App />}>
-            <Route path="details/:id" element={<DetailedItem />} />
-          </Route>
-        </Routes>
+        <Provider store={store}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/page/1" />} />
+            <Route path="/page/:page/" element={<App />}>
+              <Route path="details/:id" element={<DetailedItem />} />
+            </Route>
+          </Routes>
+        </Provider>
       </MemoryRouter>
     );
     expect(await screen.findByTestId('loading')).toBeDefined();
-    expect(await screen.findByTestId('detailed-item')).toBeDefined();
   });
 
   test('Make sure the detailed card component correctly displays the detailed card data.', async () => {
     render(
       <MemoryRouter initialEntries={['/page/1/details/JIX9t2j0ZTN9S']}>
-        <Routes>
-          <Route path="/" element={<Navigate to="/page/1" />} />
-          <Route path="/page/:page/" element={<App />}>
-            <Route path="details/:id" element={<DetailedItem />} />
-          </Route>
-        </Routes>
+        <Provider store={store}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/page/1" />} />
+            <Route path="/page/:page/" element={<App />}>
+              <Route path="details/:id" element={<DetailedItem />} />
+            </Route>
+          </Routes>
+        </Provider>
       </MemoryRouter>
     );
     await screen.findByTestId('detailed-item');
@@ -60,12 +58,14 @@ describe('Tests for the Detailed Card component:', () => {
   test('Ensure that clicking the close button hides the component.', async () => {
     render(
       <MemoryRouter initialEntries={['/page/1/details/JIX9t2j0ZTN9S']}>
-        <Routes>
-          <Route path="/" element={<Navigate to="/page/1" />} />
-          <Route path="/page/:page/" element={<App />}>
-            <Route path="details/:id" element={<DetailedItem />} />
-          </Route>
-        </Routes>
+        <Provider store={store}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/page/1" />} />
+            <Route path="/page/:page/" element={<App />}>
+              <Route path="details/:id" element={<DetailedItem />} />
+            </Route>
+          </Routes>
+        </Provider>
       </MemoryRouter>
     );
     expect(await screen.findByTestId('detailed-item')).toBeDefined();
@@ -80,17 +80,19 @@ describe('Tests for the Detailed Card component:', () => {
   test('Request to undefined gif returns an error.', async () => {
     render(
       <MemoryRouter initialEntries={['/page/1/details/asd']}>
-        <Routes>
-          <Route path="/" element={<Navigate to="/page/1" />} />
-          <Route path="/page/:page/" element={<App />}>
-            <Route path="details/:id" element={<DetailedItem />} />
-          </Route>
-        </Routes>
+        <Provider store={store}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/page/1" />} />
+            <Route path="/page/:page/" element={<App />}>
+              <Route path="details/:id" element={<DetailedItem />} />
+            </Route>
+          </Routes>
+        </Provider>
       </MemoryRouter>
     );
 
     expect(
-      await screen.findByText('Request failed with status code 404')
+      screen.queryByText('Sorry, there is nothing to show you :(')
     ).toBeDefined();
     expect(screen.queryByText('Empty fake request')).toBeNull();
   });

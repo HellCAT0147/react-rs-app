@@ -1,38 +1,35 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, test } from 'vitest';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import DetailedItem from '../components/details/DetailedItem';
 import App from '../App';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import React from 'react';
-import { mockResponse } from './helpers/mockRequest';
-import { mockResponseWithId } from './helpers/mockRequestWithId';
 import { act } from 'react-dom/test-utils';
+import createFetchMock, { FetchMock } from 'vitest-fetch-mock';
+import { store } from '../store/store';
+import { Provider } from 'react-redux';
+import { mockResponse } from './helpers/mockRequest';
 
-const mockAxios = new MockAdapter(axios);
+const fetchMock: FetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
 
-beforeEach(() => {
-  mockAxios
-    .onGet('https://api.giphy.com/v1/gifs/trending')
-    .reply(200, mockResponse);
-  mockAxios.onAny().reply(200, mockResponseWithId);
-});
-
-afterEach(() => {
-  mockAxios.resetHistory();
+beforeEach((): void => {
+  fetchMock.resetMocks();
 });
 
 describe('Tests for the Pagination component:', () => {
   test('Make sure the component updates URL query parameter when page changes.', async () => {
+    fetchMock.mockResponse(JSON.stringify(mockResponse));
     render(
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/page/1" />} />
-          <Route path="/page/:page/" element={<App />}>
-            <Route path="details/:id" element={<DetailedItem />} />
-          </Route>
-        </Routes>
+        <Provider store={store}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/page/1" />} />
+            <Route path="/page/:page/" element={<App />}>
+              <Route path="details/:id" element={<DetailedItem />} />
+            </Route>
+          </Routes>
+        </Provider>
       </BrowserRouter>
     );
     await screen.findAllByTestId('gif');

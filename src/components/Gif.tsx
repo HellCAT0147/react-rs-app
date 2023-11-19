@@ -12,7 +12,7 @@ export default function Gif({ gif }: GifProps): JSX.Element {
   const dispatch = useAppDispatch();
   return (
     <Link
-      to={'details/' + gif.id}
+      to={`details/${gif.id}`}
       className="api-item"
       data-testid="gif"
       onClick={(

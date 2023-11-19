@@ -204,4 +204,5 @@ export const mockResponseWithId = {
       },
     },
   },
+  pagination: { total_count: 1294, count: 2, offset: 0 },
 };
