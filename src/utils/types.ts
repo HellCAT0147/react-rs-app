@@ -42,3 +42,6 @@ export interface ErrorState {
 export interface ValueOwner {
   value: string;
 }
+export interface APIError {
+  error: string;
+}

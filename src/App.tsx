@@ -8,17 +8,65 @@ import Pagination from './components/Pagination';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { gifSlice } from './store/reducers/GifSlice';
-import { fetchGifs } from './store/reducers/ActionCreators';
+import { gifAPI } from './services/GifService';
+import { isAPIError } from './utils/type-guards';
+import Constants from './utils/constants';
+import getPages from './utils/pagination';
+import { Pages } from './utils/types';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 const App: React.FC = () => {
   const { searchKey, error, gifsPerPage, currentPage } = useAppSelector(
     (state) => state.gifReducer
   );
-  const { setDetailsMode, setCurrentPage } = gifSlice.actions;
+  const {
+    setDetailsMode,
+    setCurrentPage,
+    setGifs,
+    setGifsLoading,
+    setError,
+    setPages,
+  } = gifSlice.actions;
   const dispatch = useAppDispatch();
 
   const navigator = useNavigate();
   const params = useParams();
+
+  const query = gifAPI.useFetchAllGifsQuery(
+    currentPage
+      ? {
+          query: searchKey,
+          limit: gifsPerPage,
+          offset: currentPage ? (currentPage - 1) * gifsPerPage : 0,
+        }
+      : skipToken
+  );
+
+  useEffect(() => {
+    dispatch(setGifsLoading(query.isLoading || query.isFetching));
+    if (query.data) {
+      dispatch(setGifs(query.data.data));
+      const totalNumberOfPages: number = query.data.pagination.total_count;
+      const maxAPIOffset = 5000;
+      const pages: Pages = getPages(
+        Math.ceil(
+          (totalNumberOfPages > maxAPIOffset
+            ? maxAPIOffset
+            : totalNumberOfPages) / gifsPerPage
+        ),
+        currentPage || 1
+      );
+      dispatch(setPages(pages));
+    } else if (query.error)
+      dispatch(
+        setError(
+          isAPIError(query.error)
+            ? query.error.error
+            : Constants.DEFAULT_ERROR_MESSAGE
+        )
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query.isFetching, query.isLoading, query.data]);
 
   useEffect(() => {
     dispatch(setCurrentPage(params.page ? +params.page : 1));
@@ -26,27 +74,15 @@ const App: React.FC = () => {
   }, [params.page]);
 
   useEffect(() => {
-    sendQuery(searchKey);
+    if ('id' in params) {
+      navigator('/page/' + currentPage + '/details/' + params.id);
+      dispatch(setDetailsMode(true));
+    } else {
+      navigator('/page/' + currentPage);
+      dispatch(setDetailsMode(false));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, gifsPerPage]);
-
-  const sendQuery = async (
-    query: string = searchKey,
-    toPage?: number
-  ): Promise<void> => {
-    if (toPage) dispatch(setCurrentPage(toPage));
-    navigator('/page/' + currentPage);
-
-    // if ('id' in params) {
-    //   navigator('/page/' + toPage + '/details/' + params.id);
-    //   dispatch(setDetailsMode(true));
-    // } else {
-    //   navigator('/page/' + toPage);
-    //   dispatch(setDetailsMode(false));
-    // }
-
-    dispatch(fetchGifs(query, toPage || currentPage, gifsPerPage));
-  };
 
   return (
     <ErrorBoundary>

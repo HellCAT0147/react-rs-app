@@ -1,13 +1,17 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import gifReducer from './reducers/GifSlice';
+import { gifAPI } from '../services/GifService';
 
 const rootReducer = combineReducers({
   gifReducer,
+  [gifAPI.reducerPath]: gifAPI.reducer,
 });
 
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(gifAPI.middleware),
   });
 };
 

@@ -1,4 +1,4 @@
-import { IGif, DetailedGif, DataField, ValueOwner } from './types';
+import { IGif, DetailedGif, DataField, ValueOwner, APIError } from './types';
 
 export function isData(data: unknown): data is IGif[] {
   if (
@@ -11,6 +11,12 @@ export function isData(data: unknown): data is IGif[] {
 
 export function isError(error: unknown): error is Error {
   if (typeof error === 'object' && error !== null && 'message' in error)
+    return true;
+  return false;
+}
+
+export function isAPIError(error: unknown): error is APIError {
+  if (typeof error === 'object' && error !== null && 'error' in error)
     return true;
   return false;
 }

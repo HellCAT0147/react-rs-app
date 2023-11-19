@@ -8,7 +8,7 @@ import { gifSlice } from '../store/reducers/GifSlice';
 
 const DetailedItem: React.FC = () => {
   const { isLoadingGif } = useAppSelector((state) => state.gifReducer);
-  const { setGifLoading } = gifSlice.actions;
+  const { setGifLoading, setDetailsMode } = gifSlice.actions;
   const dispatch = useAppDispatch();
 
   const [gif, setGif] = useState<DetailedGif>();
@@ -49,7 +49,12 @@ const DetailedItem: React.FC = () => {
         className="detailed-item"
         data-testid="detailed-item"
       >
-        <Link to={'../../page/' + page} className="close" data-testid="close">
+        <Link
+          to={'../../page/' + page}
+          onClick={() => dispatch(setDetailsMode(false))}
+          className="close"
+          data-testid="close"
+        >
           +
         </Link>
         <h2>{gif.title}</h2>

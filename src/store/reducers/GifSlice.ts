@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { getLastRequest } from '../../utils/local-storage';
-import { DataField, IGif, Pages } from '../../utils/types';
-import getPages from '../../utils/pagination';
+import { IGif, Pages } from '../../utils/types';
 
 interface GifState {
   searchKey: string;
@@ -51,42 +50,75 @@ export const gifSlice = createSlice({
       state.gifsPerPage = action.payload;
     },
     setCurrentPage: (state: GifState, action: PayloadAction<number>): void => {
-      console.log('ну вроде задаю: ', action.payload);
-
       state.currentPage = action.payload;
-      console.log(state.currentPage);
     },
-
-    usersFetching: (state: GifState): void => {
-      state.isLoadingGifs = true;
+    setGifs: (state: GifState, action: PayloadAction<IGif[]>): void => {
+      state.gifs = action.payload;
     },
-    usersFetchingSuccess: (
-      state: GifState,
-      action: PayloadAction<DataField>
-    ): void => {
-      state.isLoadingGifs = false;
-      state.error = '';
-      state.gifs = action.payload.data;
-
-      const totalNumberOfPages: number = action.payload.pagination.total_count;
-      const maxAPIOffset = 5000;
-      state.pages = getPages(
-        Math.ceil(
-          (totalNumberOfPages > maxAPIOffset
-            ? maxAPIOffset
-            : totalNumberOfPages) / state.gifsPerPage
-        ),
-        state.currentPage || 1
-      );
-    },
-    usersFetchingError: (
-      state: GifState,
-      action: PayloadAction<string>
-    ): void => {
-      state.isLoadingGifs = false;
-      state.error = action.payload;
+    setPages: (state: GifState, action: PayloadAction<Pages>): void => {
+      state.pages = action.payload;
     },
   },
+  // extraReducers: (builder) => {
+  //   // [fetchGifs.pending.type]: (state: GifState): void => {
+  //   //   state.isLoadingGifs = true;
+  //   // },
+  //   // [fetchGifs.fulfilled.type]: (
+  //   //   state: GifState,
+  //   //   action: PayloadAction<DataField>
+  //   // ): void => {
+  //   //   state.isLoadingGifs = false;
+  //   //   state.error = '';
+  //   //   state.gifs = action.payload.data;
+  //   //   const totalNumberOfPages: number = action.payload.pagination.total_count;
+  //   //   const maxAPIOffset = 5000;
+  //   //   state.pages = getPages(
+  //   //     Math.ceil(
+  //   //       (totalNumberOfPages > maxAPIOffset
+  //   //         ? maxAPIOffset
+  //   //         : totalNumberOfPages) / state.gifsPerPage
+  //   //     ),
+  //   //     state.currentPage || 1
+  //   //   );
+  //   // },
+  //   // [fetchGifs.rejected.type]: (
+  //   //   state: GifState,
+  //   //   action: PayloadAction<string>
+  //   // ): void => {
+  //   //   state.isLoadingGifs = false;
+  //   //   state.error = action.payload;
+  //   // },
+  //   // builder
+  //   //   .addCase(fetchGifs.pending.type, (state: GifState) => {
+  //   //     state.isLoadingGifs = true;
+  //   //   })
+  //   //   .addCase(
+  //   //     fetchGifs.fulfilled.type,
+  //   //     (state: GifState, action: PayloadAction<DataField>) => {
+  //   //       state.isLoadingGifs = false;
+  //   //       state.error = '';
+  //   //       state.gifs = action.payload.data;
+  //   //       const totalNumberOfPages: number =
+  //   //         action.payload.pagination.total_count;
+  //   //       const maxAPIOffset = 5000;
+  //   //       state.pages = getPages(
+  //   //         Math.ceil(
+  //   //           (totalNumberOfPages > maxAPIOffset
+  //   //             ? maxAPIOffset
+  //   //             : totalNumberOfPages) / state.gifsPerPage
+  //   //         ),
+  //   //         state.currentPage || 1
+  //   //       );
+  //   //     }
+  //   //   )
+  //   //   .addCase(
+  //   //     fetchGifs.rejected.type,
+  //   //     (state: GifState, action: PayloadAction<string>) => {
+  //   //       state.isLoadingGifs = false;
+  //   //       state.error = action.payload;
+  //   //     }
+  //   //   );
+  // },
 });
 
 export default gifSlice.reducer;
