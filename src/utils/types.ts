@@ -44,4 +44,12 @@ export interface ValueOwner {
 }
 export interface APIError {
   error: string;
+  data: ErrorData;
+}
+interface ErrorData {
+  meta: ErrorDetails;
+}
+interface ErrorDetails {
+  msg: string;
+  status: number;
 }

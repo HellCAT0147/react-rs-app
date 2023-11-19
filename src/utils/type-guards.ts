@@ -16,7 +16,19 @@ export function isError(error: unknown): error is Error {
 }
 
 export function isAPIError(error: unknown): error is APIError {
-  if (typeof error === 'object' && error !== null && 'error' in error)
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    ('error' in error ||
+      ('data' in error &&
+        typeof error.data === 'object' &&
+        error.data !== null &&
+        'meta' in error.data &&
+        typeof error.data.meta === 'object' &&
+        error.data.meta !== null &&
+        'msg' in error.data.meta &&
+        'status' in error.data.meta))
+  )
     return true;
   return false;
 }

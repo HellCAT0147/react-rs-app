@@ -1,14 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { getLastRequest } from '../../utils/local-storage';
-import { IGif, Pages } from '../../utils/types';
+import { DetailedGif, IGif, Pages } from '../../utils/types';
 
 interface GifState {
   searchKey: string;
-  error: string;
+  gifError: string;
+  gifsError: string;
   isLoadingGifs: boolean;
   isLoadingGif: boolean;
   isDetailsOpen: boolean;
   gifsPerPage: number;
+  gif: DetailedGif | null;
   gifs: IGif[];
   pages: Pages;
   currentPage: number | undefined;
@@ -16,11 +18,13 @@ interface GifState {
 
 const initialState: GifState = {
   searchKey: getLastRequest(),
-  error: '',
+  gifError: '',
+  gifsError: '',
   isLoadingGifs: true,
   isLoadingGif: true,
   isDetailsOpen: false,
   gifsPerPage: 10,
+  gif: null,
   gifs: [],
   pages: { numbers: [], last: 0 },
   currentPage: undefined,
@@ -33,8 +37,11 @@ export const gifSlice = createSlice({
     setSearchKey: (state: GifState, action: PayloadAction<string>): void => {
       state.searchKey = action.payload;
     },
-    setError: (state: GifState, action: PayloadAction<string>): void => {
-      state.error = action.payload;
+    setGifError: (state: GifState, action: PayloadAction<string>): void => {
+      state.gifError = action.payload;
+    },
+    setGifsError: (state: GifState, action: PayloadAction<string>): void => {
+      state.gifsError = action.payload;
     },
     setGifsLoading: (state: GifState, action: PayloadAction<boolean>): void => {
       state.isLoadingGifs = action.payload;
@@ -51,6 +58,9 @@ export const gifSlice = createSlice({
     },
     setCurrentPage: (state: GifState, action: PayloadAction<number>): void => {
       state.currentPage = action.payload;
+    },
+    setGif: (state: GifState, action: PayloadAction<DetailedGif>): void => {
+      state.gif = action.payload;
     },
     setGifs: (state: GifState, action: PayloadAction<IGif[]>): void => {
       state.gifs = action.payload;

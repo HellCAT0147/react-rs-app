@@ -16,7 +16,7 @@ import { Pages } from './utils/types';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 const App: React.FC = () => {
-  const { searchKey, error, gifsPerPage, currentPage } = useAppSelector(
+  const { searchKey, gifsError, gifsPerPage, currentPage } = useAppSelector(
     (state) => state.gifReducer
   );
   const {
@@ -24,7 +24,7 @@ const App: React.FC = () => {
     setCurrentPage,
     setGifs,
     setGifsLoading,
-    setError,
+    setGifsError,
     setPages,
   } = gifSlice.actions;
   const dispatch = useAppDispatch();
@@ -59,7 +59,7 @@ const App: React.FC = () => {
       dispatch(setPages(pages));
     } else if (query.error)
       dispatch(
-        setError(
+        setGifsError(
           isAPIError(query.error)
             ? query.error.error
             : Constants.DEFAULT_ERROR_MESSAGE
@@ -88,7 +88,7 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <Search />
       <ErrorTriggerButton />
-      {error ? (
+      {gifsError ? (
         <APIError />
       ) : (
         <>

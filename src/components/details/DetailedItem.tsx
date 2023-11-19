@@ -1,38 +1,43 @@
 import { Link, useParams } from 'react-router-dom';
-import { getOne } from '../utils/API';
-import { useEffect, useState } from 'react';
-import { DetailedGif } from '../utils/types';
-import { isGif } from '../utils/type-guards';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { gifSlice } from '../store/reducers/GifSlice';
+import { useEffect } from 'react';
+import { isAPIError } from '../../utils/type-guards';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { gifSlice } from '../../store/reducers/GifSlice';
+import { gifAPI } from '../../services/GifService';
+import { skipToken } from '@reduxjs/toolkit/query';
+import Constants from '../../utils/constants';
+import './styles.css';
 
 const DetailedItem: React.FC = () => {
-  const { isLoadingGif } = useAppSelector((state) => state.gifReducer);
-  const { setGifLoading, setDetailsMode } = gifSlice.actions;
+  const { isLoadingGif, gif, gifError } = useAppSelector(
+    (state) => state.gifReducer
+  );
+  const { setGifLoading, setDetailsMode, setGif, setGifError } =
+    gifSlice.actions;
   const dispatch = useAppDispatch();
 
-  const [gif, setGif] = useState<DetailedGif>();
-  const [error, setError] = useState('');
   const id: string | undefined = useParams().id;
   const page: string | undefined = useParams().page;
 
-  async function showDetails(id: string): Promise<void> {
-    if (!isLoadingGif) dispatch(setGifLoading(true));
-    const response: false | DetailedGif | Error = await getOne(id);
-    if (response === false) {
-      setError('Server error :( ... Try to change gif :)');
-    } else if (isGif(response)) {
-      setError('');
-      setGif(response);
-    } else setError(response.message);
-
-    dispatch(setGifLoading(false));
-  }
+  const query = gifAPI.useFetchOneGifQuery(id ?? skipToken);
 
   useEffect(() => {
-    if (id) showDetails(id);
+    dispatch(setGifLoading(query.isLoading || query.isFetching));
+    if (id) {
+      if (query.data) {
+        dispatch(setGif(query.data.data));
+      } else if (query.error) {
+        dispatch(
+          setGifError(
+            isAPIError(query.error)
+              ? `${query.error.data.meta.status}! ${query.error.data.meta.msg}`
+              : Constants.DEFAULT_GIF_ERROR_MESSAGE
+          )
+        );
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, query.isFetching, query.isLoading]);
 
   if (isLoadingGif) {
     return (
@@ -83,7 +88,7 @@ const DetailedItem: React.FC = () => {
         <Link to={'../../page/' + page} className="close">
           +
         </Link>
-        {error}
+        <p className="api-error">{gifError}</p>
       </div>
     );
   }

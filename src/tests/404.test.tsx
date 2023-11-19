@@ -7,7 +7,7 @@ import { MemoryRouter, Navigate, Route, Routes } from 'react-router-dom';
 import React from 'react';
 import { mockResponse } from './helpers/mockRequest';
 import { mockResponseWithId } from './helpers/mockRequestWithId';
-import DetailedItem from '../components/DetailedItem';
+import DetailedItem from '../components/details/DetailedItem';
 import NotFound from '../components/not-found/NotFound';
 
 const mockAxios = new MockAdapter(axios);

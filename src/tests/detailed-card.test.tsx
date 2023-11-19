@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import DetailedItem from '../components/DetailedItem';
+import DetailedItem from '../components/details/DetailedItem';
 import App from '../App';
 import { MemoryRouter, Navigate, Route, Routes } from 'react-router-dom';
 import React from 'react';

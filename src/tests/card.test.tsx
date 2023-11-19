@@ -15,7 +15,7 @@ import App from '../App';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { mockResponseWithId } from './helpers/mockRequestWithId';
-import DetailedItem from '../components/DetailedItem';
+import DetailedItem from '../components/details/DetailedItem';
 
 const mockAxios = new MockAdapter(axios);
 
