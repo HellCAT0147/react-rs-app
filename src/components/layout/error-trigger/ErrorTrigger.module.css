@@ -1,0 +1,14 @@
+.errorTrigger {
+  position: fixed;
+  z-index: 1;
+  top: 10px;
+  left: 10px;
+}
+
+@media screen and (max-width: 900px) {
+  .errorTrigger {
+    left: 50%;
+    top: 50px;
+    transform: translateX(-50%);
+  }
+}
