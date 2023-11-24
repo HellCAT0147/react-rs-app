@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import styles from './Search.module.css';
-import commonStyles from '@/components/common.module.css';
+import styles from './Search.module.scss';
+import commonStyles from '@/components/common.module.scss';
 
 const Search: FC = () => {
   return (

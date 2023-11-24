@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import styles from './Main.module.css';
-import { Inter } from 'next/font/google';
+import styles from './Main.module.scss';
 import Layout from '../layout/Layout';
+import { Josefin_Sans } from 'next/font/google';
+import { NextFont } from 'next/dist/compiled/@next/font';
 
-const inter = Inter({ subsets: ['latin'] });
+const josefin: NextFont = Josefin_Sans({ subsets: ['latin'] });
 
 const Main: FC = () => {
   return (
@@ -18,7 +19,7 @@ const Main: FC = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
+      <main className={`${styles.main} ${josefin.className}`}>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus
           dignissimos cum, unde quisquam hic, dolorem nam iste molestiae
