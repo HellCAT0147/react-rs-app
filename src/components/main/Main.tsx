@@ -12,15 +12,6 @@ const Main: FC = () => {
       title="Gif Searcher"
       description="A search engine where you can find your favorite gif on demand"
     >
-      {/* <Head>
-        <title>Gif Searcher</title>
-        <meta
-          name="description"
-          content="A search engine where you can find your favorite gif on demand"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head> */}
       <main className={`${styles.main} ${josefin.className}`}>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus
