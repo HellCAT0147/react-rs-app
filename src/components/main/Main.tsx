@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import Head from 'next/head';
 import styles from './Main.module.scss';
 import Layout from '../layout/Layout';
 import { Josefin_Sans } from 'next/font/google';
@@ -9,8 +8,11 @@ const josefin: NextFont = Josefin_Sans({ subsets: ['latin'] });
 
 const Main: FC = () => {
   return (
-    <Layout>
-      <Head>
+    <Layout
+      title="Gif Searcher"
+      description="A search engine where you can find your favorite gif on demand"
+    >
+      {/* <Head>
         <title>Gif Searcher</title>
         <meta
           name="description"
@@ -18,7 +20,7 @@ const Main: FC = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> */}
       <main className={`${styles.main} ${josefin.className}`}>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus
