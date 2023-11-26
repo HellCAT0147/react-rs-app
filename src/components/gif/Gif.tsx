@@ -2,14 +2,27 @@ import { FC } from 'react';
 import { IGif } from './gif.interface';
 import Link from 'next/link';
 import styles from './Gif.module.scss';
+import { useRouter } from 'next/router';
 
 interface GifProps {
   gif: IGif;
 }
 
 const Gif: FC<GifProps> = ({ gif }) => {
+  const router = useRouter();
+  const { query } = router;
+  const { query: search, limit, page } = query;
+  const queryWithoutPage = { query: search, limit };
+
   return (
-    <Link href="#" className={styles.gif} data-testid="gif">
+    <Link
+      href={{
+        pathname: `/page/${page}`,
+        query: { ...queryWithoutPage, gif: gif.id },
+      }}
+      className={styles.gif}
+      data-testid="gif"
+    >
       <h3 className={styles.gifTitle}>{gif.title}</h3>
       <video
         className={styles.gifContent}

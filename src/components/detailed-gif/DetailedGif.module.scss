@@ -1,0 +1,22 @@
+.detailedItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: calc(65vw - 20px);
+}
+
+.close {
+  text-align: right;
+  font-size: 7rem;
+  cursor: pointer;
+  transform: rotate(45deg);
+  color: #bd0000a9;
+}
+
+.info {
+  width: 100%;
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}
