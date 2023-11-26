@@ -1,11 +1,10 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { MemoryRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from '../store/store';
 import createFetchMock, { FetchMock } from 'vitest-fetch-mock';
-import { mockResponse } from './helpers/mockRequest';
-import App from '../App';
+import { mockResponse } from './helpers/mockResponse';
+import { Provider } from 'react-redux';
+import { store } from '@/store/store';
+import Gifs from '@/components/gifs/Gifs';
 
 const fetchMock: FetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -16,32 +15,28 @@ beforeEach((): void => {
 
 describe('Tests for the Card List component:', () => {
   test('Verify that the component renders the specified number of cards.', async () => {
-    fetchMock.mockResponse(JSON.stringify(mockResponse));
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Gifs data={mockResponse.data} />
+      </Provider>
     );
     const gifs: HTMLElement[] = await screen.findAllByTestId('gif');
     expect(gifs).toHaveLength(2);
+    expect(gifs).not.toHaveLength(3);
   });
 });
 
 describe('Tests for the Card List component:', () => {
   test('Check that an appropriate message is displayed if no cards are present.', async () => {
     fetchMock.mockResponse(JSON.stringify({ data: [] }));
-    cleanup();
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Gifs data={[]} />
+      </Provider>
     );
-    expect(
-      screen.queryByText('Sorry, there is nothing to show you :(')
-    ).toBeDefined();
+    const message: HTMLElement = await screen.findByText(
+      'Sorry, there is nothing to show you :('
+    );
+    expect(message).toBeDefined();
   });
 });

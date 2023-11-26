@@ -1,12 +1,19 @@
-import React from 'react';
-import './styles.css';
+import { FC } from 'react';
+import styles from './NotFound.module.scss';
+import Head from 'next/head';
 
-const NotFound: React.FC = () => {
+const NotFound: FC = () => {
   return (
-    <div className="page-404">
-      <h1>OOPS!</h1>
-      <h2 data-testid="message">That page cannot be found.</h2>
-    </div>
+    <>
+      <Head>
+        <title>Not found</title>
+      </Head>
+      <section className={styles.page404}>
+        <h1>OOPS!</h1>
+        <h2 data-testid="message">That page cannot be found.</h2>
+      </section>
+    </>
   );
 };
+
 export default NotFound;
