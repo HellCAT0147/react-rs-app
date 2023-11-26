@@ -17,7 +17,8 @@ const Pagination: FC<PaginationProps> = ({ data }) => {
   const { setGifsPerPage } = gifSlice.actions;
   const dispatch = useAppDispatch();
 
-  const { query } = useRouter();
+  const router = useRouter();
+  const { query } = router;
   const { query: search, limit } = query;
   const queryWithoutPage = { query: search, limit };
 
@@ -33,7 +34,10 @@ const Pagination: FC<PaginationProps> = ({ data }) => {
   );
 
   const showMoreLess = (): void => {
-    console.log('request');
+    router.push({
+      pathname: '/page/1',
+      query: { ...searchParams },
+    });
   };
 
   return (
