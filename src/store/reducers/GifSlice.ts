@@ -1,9 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { SearchParams } from '@/components/layout/search/search.interface';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 // TODO: refactor this file - delete comments
 
 interface GifState {
-  // searchKey: string;
+  searchParams: SearchParams;
   // gifError: string;
   // gifsError: string;
   // isLoadingGifs: boolean;
@@ -17,7 +18,7 @@ interface GifState {
 }
 
 const initialState: GifState = {
-  // searchKey: getLastRequest(),
+  searchParams: { query: '', limit: '10', offset: '0' },
   // gifError: '',
   // gifsError: '',
   // isLoadingGifs: true,
@@ -34,9 +35,15 @@ export const gifSlice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    // setSearchKey: (state: GifState, action: PayloadAction<string>): void => {
-    //   state.searchKey = action.payload;
-    // },
+    setSearchKey: (state: GifState, action: PayloadAction<string>): void => {
+      state.searchParams.query = action.payload;
+    },
+    setGifsPerPage: (state: GifState, action: PayloadAction<string>): void => {
+      state.searchParams.limit = action.payload;
+    },
+    setOffset: (state: GifState, action: PayloadAction<string>): void => {
+      state.searchParams.offset = action.payload;
+    },
     // setGifError: (state: GifState, action: PayloadAction<string>): void => {
     //   state.gifError = action.payload;
     // },
@@ -51,10 +58,6 @@ export const gifSlice = createSlice({
     // },
     // setDetailsMode: (state: GifState, action: PayloadAction<boolean>): void => {
     //   state.isDetailsOpen = action.payload;
-    // },
-    // setGifsPerPage: (state: GifState, action: PayloadAction<number>): void => {
-    //   state.currentPage = 1;
-    //   state.gifsPerPage = action.payload;
     // },
     // setCurrentPage: (state: GifState, action: PayloadAction<number>): void => {
     //   state.currentPage = action.payload;

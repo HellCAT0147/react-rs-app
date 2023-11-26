@@ -5,15 +5,6 @@ export interface IGif {
 }
 
 interface IImage {
-  original: ImageOriginal;
-  fixed_width_small_still: ImageSmall;
-}
-
-interface ImageOriginal {
-  mp4: string;
-  url: string;
-}
-
-interface ImageSmall {
-  url: string;
+  original: { mp4: string; url: string };
+  fixed_width_small_still: { url: string };
 }

@@ -2,11 +2,12 @@ import { DetailedGif } from '@/components/detailed-gif/detailed-gif.interface';
 import { DataField } from '@/components/gifs/gifs.interface';
 import Constants from '@/utils/constants';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { HYDRATE } from 'next-redux-wrapper';
 
 interface APIGifsArgs {
   query: string;
-  limit: number;
-  offset: number;
+  limit: string;
+  offset: string;
 }
 
 interface DetailedGifContainer {
@@ -16,6 +17,11 @@ interface DetailedGifContainer {
 export const giphyServer = createApi({
   reducerPath: 'giphyServer',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://api.giphy.com' }),
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
   endpoints: (build) => ({
     fetchAllGifs: build.query<DataField, APIGifsArgs>({
       query: ({ query, limit, offset }) => ({
@@ -39,3 +45,10 @@ export const giphyServer = createApi({
     }),
   }),
 });
+
+export const { fetchAllGifs, fetchOneGif } = giphyServer.endpoints;
+export const {
+  useFetchAllGifsQuery,
+  useFetchOneGifQuery,
+  util: { getRunningQueriesThunk },
+} = giphyServer;

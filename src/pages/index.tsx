@@ -1,7 +1,7 @@
-import Main from '@/components/main/Main';
 import { NextPage } from 'next';
 
-const MainPage: NextPage = () => {
-  return <Main />;
+const StartPage: NextPage = () => {
+  return <></>;
 };
-export default MainPage;
+
+export default StartPage;

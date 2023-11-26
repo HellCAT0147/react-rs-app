@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import gifReducer from './reducers/GifSlice';
 import { giphyServer } from './services/GifService';
+import { createWrapper } from 'next-redux-wrapper';
 
 const rootReducer = combineReducers({
   gifReducer,
@@ -20,3 +21,4 @@ export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];
 
 export const store = setupStore();
+export const wrapper = createWrapper<AppStore>(setupStore, { debug: true });
