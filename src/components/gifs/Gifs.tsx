@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 
 const Gifs: FC<PropsWithChildren<IGifs>> = ({ data, children }) => {
   const { query } = useRouter();
-  console.log('test');
 
   return (
     <>

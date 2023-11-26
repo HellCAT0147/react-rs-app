@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/page/1?query=&limit=20&offset=0',
+        destination: '/page/1',
         permanent: true,
       },
     ];

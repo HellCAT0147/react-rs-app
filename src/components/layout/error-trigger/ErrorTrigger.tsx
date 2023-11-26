@@ -10,8 +10,6 @@ const ErrorTrigger: FC = () => {
   const dispatch = useAppDispatch();
 
   const explode = (): void => {
-    console.log('explode?');
-
     dispatch(setIsError());
   };
 

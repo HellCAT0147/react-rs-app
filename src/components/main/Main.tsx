@@ -11,8 +11,6 @@ import DetailedGif from '../detailed-gif/DetailedGif';
 const josefin: NextFont = Josefin_Sans({ subsets: ['latin'] });
 
 const Main: FC<ServerData> = ({ gifsData, gifData }) => {
-  console.log();
-
   return (
     <Layout
       title="Gif Searcher"

@@ -1,8 +1,6 @@
 import { SearchParams } from '@/components/layout/search/search.interface';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-// TODO: refactor this file - delete comments
-
 interface GifState {
   searchParams: SearchParams;
   isError: boolean;
