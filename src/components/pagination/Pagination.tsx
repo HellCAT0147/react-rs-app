@@ -2,9 +2,11 @@ import { FC } from 'react';
 import { Pages, Pagination } from './pagination.interface';
 import styles from './Pagination.module.scss';
 import getPages from '@/utils/pagination-builder';
-import { useAppSelector } from '@/store/hooks/typed-hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/typed-hooks';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { hasValueField } from '@/utils/type-guards';
+import { gifSlice } from '@/store/reducers/GifSlice';
 
 interface PaginationProps {
   data: Pagination;
@@ -12,6 +14,9 @@ interface PaginationProps {
 
 const Pagination: FC<PaginationProps> = ({ data }) => {
   const { searchParams } = useAppSelector((state) => state.gifReducer);
+  const { setGifsPerPage } = gifSlice.actions;
+  const dispatch = useAppDispatch();
+
   const { query } = useRouter();
   const { query: search, limit } = query;
   const queryWithoutPage = { query: search, limit };
@@ -26,6 +31,10 @@ const Pagination: FC<PaginationProps> = ({ data }) => {
     ),
     currentPage
   );
+
+  const showMoreLess = (): void => {
+    console.log('request');
+  };
 
   return (
     <div className={styles.controls}>
@@ -50,25 +59,23 @@ const Pagination: FC<PaginationProps> = ({ data }) => {
         )}
         {pages.numbers.includes(pages.last) ? '' : '...'}
       </div>
-      {/* <p>{tempGifsPerPage}</p>
-      <div className="pages-count">
+      <p>{searchParams.limit}</p>
+      <div className={styles.pagesCount}>
         10
         <input
-          value={tempGifsPerPage}
+          value={searchParams.limit}
           min={10}
           max={50}
           step={1}
           onChange={({ target }): void => {
-            if (hasValueField(target)) setTempGifsPerPage(+target.value);
+            if (hasValueField(target)) dispatch(setGifsPerPage(target.value));
           }}
-          onClick={(): void => {
-            dispatch(setGifsPerPage(tempGifsPerPage));
-          }}
-          className="pages-count-handle"
+          onClick={showMoreLess}
+          className={styles.pagesCountHandle}
           type="range"
         />
         50
-      </div> */}
+      </div>
     </div>
   );
 };

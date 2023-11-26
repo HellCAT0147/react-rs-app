@@ -5,6 +5,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface GifState {
   searchParams: SearchParams;
+  isError: boolean;
   // gifError: string;
   // gifsError: string;
   // isLoadingGifs: boolean;
@@ -19,6 +20,7 @@ interface GifState {
 
 const initialState: GifState = {
   searchParams: { query: '', limit: '10' },
+  isError: false,
   // gifError: '',
   // gifsError: '',
   // isLoadingGifs: true,
@@ -40,6 +42,9 @@ export const gifSlice = createSlice({
     },
     setGifsPerPage: (state: GifState, action: PayloadAction<string>): void => {
       state.searchParams.limit = action.payload;
+    },
+    setIsError: (state: GifState): void => {
+      state.isError = true;
     },
     // setGifError: (state: GifState, action: PayloadAction<string>): void => {
     //   state.gifError = action.payload;

@@ -28,3 +28,37 @@
     pointer-events: none;
   }
 }
+
+.pagesCount {
+  display: flex;
+  font-size: 1.25rem;
+}
+
+.pagesCountHandle {
+  margin: 0 10px;
+  max-width: 200px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 15rem;
+
+  &::-webkit-slider-runnable-track {
+    background: #fff;
+    height: 0.5rem;
+  }
+
+  &::-moz-range-track {
+    background: #fff;
+    height: 0.5rem;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: -8px;
+    background-color: #bd0000a9;
+    height: 1.5rem;
+    width: 1rem;
+  }
+}
