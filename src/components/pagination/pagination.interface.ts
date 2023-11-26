@@ -3,3 +3,8 @@ export interface Pagination {
   offset: number;
   total_count: number;
 }
+
+export interface Pages {
+  numbers: number[];
+  last: number;
+}

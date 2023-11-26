@@ -12,8 +12,10 @@ import { SearchParams } from '@/components/layout/search/search.interface';
 const MainPage: NextPage<ServerData> = (data) => {
   const router = useRouter();
   const { query } = router;
+  const pageNumber = query.page;
+
   const { searchParams } = useAppSelector((state) => state.gifReducer);
-  const { setSearchKey, setGifsPerPage, setOffset } = gifSlice.actions;
+  const { setSearchKey, setGifsPerPage } = gifSlice.actions;
   const dispatch = useAppDispatch();
 
   useEffect((): void => {
@@ -26,12 +28,9 @@ const MainPage: NextPage<ServerData> = (data) => {
       params.limit = query.limit;
       dispatch(setGifsPerPage(query.limit));
     }
-    if ('offset' in query && typeof query.offset === 'string') {
-      params.offset = query.offset;
-      dispatch(setOffset(query.offset));
-    }
+
     router.push({
-      pathname: '/page/1',
+      pathname: `/page/${pageNumber}`,
       query: { ...params },
     });
   }, []);
@@ -41,16 +40,18 @@ const MainPage: NextPage<ServerData> = (data) => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    const { query = '', limit = '10', offset = '0' } = context.query;
+    const { query = '', limit = '10', page = '1' } = context.query;
     let data;
     if (
       typeof query === 'string' &&
       typeof limit === 'string' &&
-      typeof offset === 'string'
-    )
+      typeof page === 'string'
+    ) {
+      const offset: string = `${(+page - 1) * +limit}`;
       data = await store.dispatch(
         fetchAllGifs.initiate({ query, limit, offset })
       );
+    }
 
     return {
       props: { data: data?.data },

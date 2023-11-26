@@ -18,7 +18,7 @@ interface GifState {
 }
 
 const initialState: GifState = {
-  searchParams: { query: '', limit: '10', offset: '0' },
+  searchParams: { query: '', limit: '10' },
   // gifError: '',
   // gifsError: '',
   // isLoadingGifs: true,
@@ -40,9 +40,6 @@ export const gifSlice = createSlice({
     },
     setGifsPerPage: (state: GifState, action: PayloadAction<string>): void => {
       state.searchParams.limit = action.payload;
-    },
-    setOffset: (state: GifState, action: PayloadAction<string>): void => {
-      state.searchParams.offset = action.payload;
     },
     // setGifError: (state: GifState, action: PayloadAction<string>): void => {
     //   state.gifError = action.payload;
