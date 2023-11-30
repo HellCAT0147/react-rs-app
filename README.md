@@ -1,2 +1,2 @@
 # react-rs-app
-React App for RS school modules 1 - 5
+React App for RS school module 6
