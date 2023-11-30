@@ -51,6 +51,7 @@
     "lint-staged": "^15.0.2",
     "msw": "^2.0.5",
     "prettier": "^3.0.3",
+    "react-hook-form": "^7.48.2",
     "sass": "^1.69.5",
     "typescript": "^5.0.2",
     "vitest": "^0.34.6",
