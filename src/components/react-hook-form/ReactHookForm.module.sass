@@ -1,3 +1,74 @@
+@import '../../utils/styles/_variables'
+
 .heading
-  color: red
+  color: $text-color
+  text-align: center
+
+.formContainer
   margin: auto
+  background-color: $form-bg-color
+  border-radius: 7px
+  box-shadow: inset 0px 0px 10px 5px $main-color
+  padding: 30px
+  max-width: 400px
+
+.formElement
+  width: 100%
+  background: transparent
+  border: none
+  border-bottom: solid 1px $transparent-second-color
+  outline: none
+  caret-color: $text-color
+  color: $text-color
+  padding: 5px
+  font-size: 1rem
+  margin-top: 15px
+
+.hideArrows
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button
+    -webkit-appearance: none
+    margin: 0
+    -moz-appearance: textfield
+
+.selectMenu
+  background-color: $form-bg-color
+  cursor: pointer
+  border-bottom: solid 1px $transparent-second-color
+  padding: 5px 30px 5px 5px
+  appearance: none
+
+.labelledInput
+  display: flex
+  justify-content: flex-start
+  flex-wrap: wrap
+  margin-top: 15px
+  gap: 10px
+  color: $text-color
+  padding: 5px
+
+.reversed
+  justify-content: flex-end
+  flex-direction: row-reverse
+
+.pic
+  cursor: pointer
+  border: none
+
+@media screen and (max-width: 375px)
+  .file
+    max-width: 200px
+
+.countries
+  max-height: 200px
+  overflow: auto
+  margin-top: 5px
+
+.country
+  cursor: pointer
+  padding: 0 20px
+  border: none
+  margin: 5px 0 10px 0
+
+  &:hover
+    color: $transparent-second-color
