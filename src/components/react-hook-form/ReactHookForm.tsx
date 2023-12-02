@@ -1,17 +1,33 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useAppSelector } from '../../store/hooks/typed-hooks';
 import styles from './ReactHookForm.module.sass';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Error from '../error/Error';
+import { schema } from '../../utils/logic/validation';
+import { FormData } from '../../utils/interfaces/validation';
 
 const ReactHookForm: React.FC = (): JSX.Element => {
   const { countries } = useAppSelector((state) => state.gifReducer);
-  const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+  const [randomCountry] = useState<string>(
+    countries[Math.floor(Math.random() * countries.length)]
+  );
   const [countryMatches, setCountryMatches] = useState<string[]>([]);
   const [countryText, setCountryText] = useState<string>();
 
-  const { register } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(schema),
+  });
 
-  const filterCountries = (text: string) => {
+  const filterCountries = (e: ChangeEvent<HTMLInputElement>): void => {
+    register('country').onChange(e);
+    const text: string = e.target.value;
     setCountryText(text);
     if (!text.length) setCountryMatches([]);
     else {
@@ -23,45 +39,57 @@ const ReactHookForm: React.FC = (): JSX.Element => {
     }
   };
 
-  const setCountry = (country: string) => {
+  const setCountry = (country: string): void => {
     setCountryText(country);
     setCountryMatches([]);
+  };
+
+  const onSubmitHandler = (data: FormData): void => {
+    const dataWithCountry = { ...data, country: countryText };
+    console.log(dataWithCountry);
+    reset();
+    setCountryText('');
   };
 
   return (
     <article className={styles.formContainer}>
       <h1 className={styles.heading}>React Hook Form</h1>
-      <form>
+      <form onSubmit={handleSubmit(onSubmitHandler)}>
         <input
           className={styles.formElement}
           type="text"
           placeholder="Name"
           {...register('name')}
         />
+        <Error error={errors.name} />
         <input
           className={`${styles.formElement} ${styles.hideArrows}`}
           type="number"
           placeholder="Age"
           {...register('age')}
         />
+        <Error error={errors.age} />
         <input
           className={styles.formElement}
           type="email"
           placeholder="Email"
           {...register('email')}
         />
+        <Error error={errors.email} />
         <input
           className={styles.formElement}
           type="password"
           placeholder="Password"
           {...register('password')}
         />
+        <Error error={errors.password} />
         <input
           className={styles.formElement}
           type="password"
           placeholder="Confirm password"
           {...register('confirm')}
         />
+        <Error error={errors.confirm} />
         <select
           className={`${styles.formElement} ${styles.selectMenu}`}
           {...register('gender')}
@@ -70,6 +98,7 @@ const ReactHookForm: React.FC = (): JSX.Element => {
           <option value="m">Male</option>
           <option value="o">Other</option>
         </select>
+        <Error error={errors.gender} />
         <div className={`${styles.labelledInput} ${styles.reversed}`}>
           <label htmlFor="terms">A Terms and Conditions agreement</label>
           <input
@@ -79,6 +108,7 @@ const ReactHookForm: React.FC = (): JSX.Element => {
             id="terms"
           />
         </div>
+        <Error error={errors.terms} />
         <div className={styles.labelledInput}>
           <label htmlFor="pic">Picture</label>
           <input
@@ -88,14 +118,16 @@ const ReactHookForm: React.FC = (): JSX.Element => {
             id="pic"
           />
         </div>
+        <Error error={errors.pic} />
         <input
           className={styles.formElement}
           type="text"
           value={countryText ? countryText : ''}
           placeholder={`Country, e.g. ${randomCountry}`}
           {...register('country')}
-          onChange={(e): void => filterCountries(e.target.value)}
+          onChange={filterCountries}
         />
+        <Error error={errors.country} />
         <div className={styles.countries}>
           {countryMatches &&
             countryMatches.map((country, id) => {
@@ -113,6 +145,9 @@ const ReactHookForm: React.FC = (): JSX.Element => {
               );
             })}
         </div>
+        <button type="submit" className={styles.submit}>
+          Submit
+        </button>
       </form>
     </article>
   );
