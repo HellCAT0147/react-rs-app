@@ -8,7 +8,6 @@ interface FormState {
   tempPicture: string;
   hookUsers: User[];
   refUsers: User[];
-  selectedCountry?: string;
 }
 
 const initialState: FormState = {
@@ -52,9 +51,6 @@ export const formSlice = createSlice({
     },
     setRefUser: (state: FormState, action: PayloadAction<User>): void => {
       state.refUsers.push(action.payload);
-    },
-    selectCountry: (state: FormState, action: PayloadAction<string>): void => {
-      state.selectedCountry = action.payload;
     },
   },
 });
