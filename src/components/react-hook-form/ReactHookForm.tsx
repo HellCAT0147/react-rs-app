@@ -8,8 +8,10 @@ import { schema } from '../../utils/logic/validation';
 import { FormData } from '../../utils/types/interfaces';
 import { formSlice } from '../../store/reducers/FormSlice';
 import { genders } from '../../utils/types/types';
+import { useNavigate } from 'react-router-dom';
 
 const ReactHookForm: React.FC = (): JSX.Element => {
+  const navigate = useNavigate();
   const { countries, tempPicture } = useAppSelector(
     (state) => state.gifReducer
   );
@@ -66,6 +68,7 @@ const ReactHookForm: React.FC = (): JSX.Element => {
       })
     );
     reset();
+    navigate('/');
   };
 
   const handlePicture = async (
