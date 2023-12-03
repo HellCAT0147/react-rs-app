@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import { FormData } from '../types/interfaces';
 import { genders } from '../types/types';
+import { isFile } from '../types/type-guards';
 
 export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
   name: yup
@@ -62,24 +63,11 @@ export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
       'file-size',
       'attach an image with a size smaller than 1MB',
       (value) => {
-        if (
-          '0' in value &&
-          typeof value[0] === 'object' &&
-          value[0] &&
-          'size' in value[0] &&
-          typeof value[0].size === 'number' // TODO: move this to type-guard
-        )
-          return value && value[0].size <= 1000000;
+        if (isFile(value)) return value && value[0].size <= 1000000;
       }
     )
     .test('file-type', 'png, jpeg or jpg are allowed', (value) => {
-      if (
-        '0' in value &&
-        typeof value[0] === 'object' &&
-        value[0] &&
-        'type' in value[0] &&
-        typeof value[0].type === 'string' // TODO: move this to type-guard
-      )
+      if (isFile(value))
         return value[0].type === 'image/jpeg' || value[0].type === 'image/png';
     }),
 

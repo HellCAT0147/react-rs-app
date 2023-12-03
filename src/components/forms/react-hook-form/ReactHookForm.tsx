@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState, useMemo } from 'react';
 import {
   useAppDispatch,
   useAppSelector,
@@ -23,18 +23,19 @@ const ReactHookForm: React.FC = (): JSX.Element => {
   const { setTempPicture, setHookUser } = formSlice.actions;
   const dispatch = useAppDispatch();
   const [randomCountry] = useState<string>(
-    countries[Math.floor(Math.random() * countries.length)]
-  ); // TODO: move to useMemo
+    useMemo(() => {
+      return countries[Math.floor(Math.random() * countries.length)];
+    }, [countries])
+  );
   const [countryMatches, setCountryMatches] = useState<string[]>([]);
   const [countryText, setCountryText] = useState<string>();
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormData>({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -189,7 +190,7 @@ const ReactHookForm: React.FC = (): JSX.Element => {
               );
             })}
         </div>
-        <button disabled={isDisabled} type="submit" className={styles.submit}>
+        <button disabled={!isValid} type="submit" className={styles.submit}>
           Submit
         </button>
       </form>

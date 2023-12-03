@@ -82,11 +82,14 @@
   cursor: pointer
   border: outset
 
-  &:hover
+  &:hover:not(:disabled)
     transform: translateX(-50%) scale(1.05)
 
-  &:active
+  &:active:not(:disabled)
     border: inset
+
+  &:disabled
+    cursor: not-allowed
 
 .message
   color: $text-color

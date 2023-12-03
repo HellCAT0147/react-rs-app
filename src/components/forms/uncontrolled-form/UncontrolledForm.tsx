@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState, useMemo } from 'react';
 import {
   useAppDispatch,
   useAppSelector,
@@ -37,15 +37,15 @@ const UncontrolledForm: React.FC = (): JSX.Element => {
   const { setTempPicture, setRefUser } = formSlice.actions;
   const dispatch = useAppDispatch();
   const [randomCountry] = useState<string>(
-    countries[Math.floor(Math.random() * countries.length)]
-  ); // TODO: move to useMemo
+    useMemo(() => {
+      return countries[Math.floor(Math.random() * countries.length)];
+    }, [countries])
+  );
   const [countryMatches, setCountryMatches] = useState<string[]>([]);
-  const [countryText, setCountryText] = useState<string>();
   const [errors, setErrors] = useState<Errors>({});
 
   const filterCountries = (e: ChangeEvent<HTMLInputElement>): void => {
     const text: string = e.target.value;
-    setCountryText(text);
     if (!text.length) setCountryMatches([]);
     else {
       const matches = countries.filter((country) => {
@@ -57,7 +57,7 @@ const UncontrolledForm: React.FC = (): JSX.Element => {
   };
 
   const setCountry = (country: string): void => {
-    setCountryText(country);
+    if (isRef(countryRef)) countryRef.current.value = country;
     setCountryMatches([]);
   };
 
@@ -192,14 +192,13 @@ const UncontrolledForm: React.FC = (): JSX.Element => {
             name="picture"
             ref={pictureRef}
             id="pic"
-            onChange={(e) => handlePicture(e)}
+            onChange={handlePicture}
           />
         </div>
         <Error error={errors.picture} />
         <input
           className={styles.formElement}
           type="text"
-          value={countryText ? countryText : ''}
           placeholder={`Country, e.g. ${randomCountry}`}
           name="country"
           ref={countryRef}
