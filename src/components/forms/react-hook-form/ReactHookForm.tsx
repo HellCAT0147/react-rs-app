@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   useAppDispatch,
   useAppSelector,
@@ -27,6 +27,7 @@ const ReactHookForm: React.FC = (): JSX.Element => {
   ); // TODO: move to useMemo
   const [countryMatches, setCountryMatches] = useState<string[]>([]);
   const [countryText, setCountryText] = useState<string>();
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   const {
     register,
@@ -188,7 +189,7 @@ const ReactHookForm: React.FC = (): JSX.Element => {
               );
             })}
         </div>
-        <button type="submit" className={styles.submit}>
+        <button disabled={isDisabled} type="submit" className={styles.submit}>
           Submit
         </button>
       </form>

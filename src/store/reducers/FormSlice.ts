@@ -6,33 +6,37 @@ import { User } from '../../utils/types/interfaces';
 interface FormState {
   countries: string[];
   tempPicture: string;
-  hookUser: User;
-  refUser: User;
+  hookUsers: User[];
+  refUsers: User[];
 }
 
 const initialState: FormState = {
   countries: countries,
   tempPicture: '',
-  hookUser: {
-    age: 46,
-    password: 'clam chowder',
-    country: 'United States of America (the)',
-    email: 'johncena@hotmail.com',
-    gender: 'Male',
-    name: 'John Cena',
-    terms: true,
-    picture: hookUserLogo,
-  },
-  refUser: {
-    age: 51,
-    password: 'The Rock Johnson',
-    country: 'United States of America (the)',
-    email: 'johnson@xfl.com',
-    gender: 'Male',
-    name: 'Dwayne Johnson',
-    terms: false,
-    picture: refUserLogo,
-  },
+  hookUsers: [
+    {
+      age: 46,
+      password: 'clam chowder',
+      country: 'United States of America (the)',
+      email: 'johncena@hotmail.com',
+      gender: 'Male',
+      name: 'John Cena',
+      terms: true,
+      picture: hookUserLogo,
+    },
+  ],
+  refUsers: [
+    {
+      age: 51,
+      password: 'The Rock Johnson',
+      country: 'United States of America (the)',
+      email: 'johnson@xfl.com',
+      gender: 'Male',
+      name: 'Dwayne Johnson',
+      terms: false,
+      picture: refUserLogo,
+    },
+  ],
 };
 
 export const formSlice = createSlice({
@@ -43,10 +47,10 @@ export const formSlice = createSlice({
       state.tempPicture = action.payload;
     },
     setHookUser: (state: FormState, action: PayloadAction<User>): void => {
-      state.hookUser = action.payload;
+      state.hookUsers.push(action.payload);
     },
     setRefUser: (state: FormState, action: PayloadAction<User>): void => {
-      state.refUser = action.payload;
+      state.refUsers.push(action.payload);
     },
   },
 });
