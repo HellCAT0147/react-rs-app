@@ -1,4 +1,4 @@
-import UncontrolledForm from '../components/uncontrolled-form/UncontrolledForm';
+import UncontrolledForm from '../components/forms/uncontrolled-form/UncontrolledForm';
 
 const UncontrolledFormPage: React.FC = (): JSX.Element => <UncontrolledForm />;
 

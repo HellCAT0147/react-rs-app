@@ -1,15 +1,13 @@
-import { Gender } from './types';
-
 export interface FormData {
   name: string;
   age: number;
   email: string;
   password: string;
   confirm: string;
-  gender: Gender;
+  gender: string;
   terms: boolean;
   picture: object;
-  country?: string;
+  country: string;
 }
 
 export interface User {
@@ -17,8 +15,24 @@ export interface User {
   password: string;
   country: string;
   email: string;
-  gender: Gender;
+  gender: string;
   name: string;
   terms: boolean;
   picture: string;
+}
+
+export interface Errors {
+  name?: { message: string };
+  age?: { message: string };
+  email?: { message: string };
+  password?: { message: string };
+  confirm?: { message: string };
+  terms?: { message: string };
+  picture?: { message: string };
+  country?: { message: string };
+  gender?: { message: string };
+}
+
+export interface Ref {
+  current: { value: string };
 }

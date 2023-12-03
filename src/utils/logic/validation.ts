@@ -5,19 +5,20 @@ import { genders } from '../types/types';
 export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
   name: yup
     .string()
-    .matches(/^[\p{Lu}\p{Lt}].*$/u, 'name must be capitalized')
-    .required(),
+    .required()
+    .matches(/^[\p{Lu}\p{Lt}].*$/u, 'name must be capitalized'),
 
   age: yup
     .number()
+    .required()
     .typeError('age must be a number')
-    .min(0, 'age must not be negative')
-    .required(),
+    .min(0, 'age must not be negative'),
 
   email: yup.string().email().required(),
 
   password: yup
     .string()
+    .required()
     .test('password-complexity', function (value: string = ''):
       | true
       | yup.ValidationError {
@@ -43,17 +44,16 @@ export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
         });
       }
       return true;
-    })
-    .required(),
+    }),
 
   confirm: yup
     .string()
-    .oneOf([yup.ref('password')], 'passwords must match')
-    .required('confirm password'),
+    .required('confirm password')
+    .oneOf([yup.ref('password')], 'passwords must match'),
 
   gender: yup.string().oneOf(genders).required(),
 
-  terms: yup.boolean().isTrue().required(),
+  terms: yup.boolean().isTrue('you should agree our awesome terms').required(),
 
   picture: yup
     .mixed()
