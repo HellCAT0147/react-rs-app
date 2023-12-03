@@ -1,0 +1,25 @@
+@import '../../utils/styles/_variables'
+
+.menu
+  margin: 20px
+  font-size: 1.25rem
+
+  .items
+    display: flex
+    justify-content: center
+    align-items: center
+    column-gap: 30px
+    row-gap: 15px
+
+    @media screen and (max-width: 575px)
+      flex-direction: column
+
+.link
+  color: $text-color
+  padding: 10px
+
+  &:hover:not(.active)
+    text-decoration: underline $transparent-second-color
+
+.active
+  color: $transparent-second-color

@@ -1,0 +1,43 @@
+@import '../../utils/styles/_variables'
+
+.formTitle
+  color: $text-color
+  font-size: 2rem
+
+.users
+  @media screen and (min-width: 768px)
+    max-width: 50vw
+
+.user
+  margin: 20px 0 40px
+
+  @media screen and (max-width: 768px)
+    display: flex
+    flex-direction: column
+    align-items: center
+
+.userPicture
+  max-width: 500px
+  width: 100%
+  border-radius: 20px
+  margin: auto
+
+.field
+  color: $transparent-second-color
+  margin-top: 10px
+
+  @media screen and (max-width: 768px)
+    text-align: center
+
+  @media screen and (max-width: 500px)
+    font-size: 1rem
+
+@media screen and (min-width: 768px)
+  .toRight
+    text-align: right
+
+.infoContent
+  color: $text-color
+
+.shadowed
+  opacity: 0.2
