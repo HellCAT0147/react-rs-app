@@ -1,8 +1,8 @@
-import { FieldError } from 'react-hook-form';
+import { FieldError, Merge } from 'react-hook-form';
 import styles from './Error.module.sass';
 
 interface ErrorProps {
-  error: FieldError | undefined;
+  error: FieldError | Merge<FieldError, object> | undefined;
 }
 const Error: React.FC<ErrorProps> = ({ error }): JSX.Element => {
   return error ? <p className={styles.message}>{error.message}</p> : <></>;

@@ -6,6 +6,6 @@ export interface FormData {
   confirm: string;
   gender: 'f' | 'm' | 'o';
   terms: boolean;
-  pic: string;
+  picture: object;
   country?: string;
 }

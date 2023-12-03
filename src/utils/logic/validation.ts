@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { FormData } from '../interfaces/validation';
+import { FormData } from '../types/interfaces';
 
 export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
   name: yup
@@ -17,7 +17,7 @@ export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
 
   password: yup
     .string()
-    .test('password-complexity', 'фыв', function (value: string = ''):
+    .test('password-complexity', function (value: string = ''):
       | true
       | yup.ValidationError {
       const lowercaseRegex = /[a-z]/;
@@ -52,9 +52,35 @@ export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
 
   gender: yup.string().oneOf(['f', 'm', 'o']).required(),
 
-  terms: yup.boolean().isTrue('you should agree our awesome terms').required(),
+  terms: yup.boolean().isTrue().required(),
 
-  pic: yup.string().required(),
+  picture: yup
+    .mixed()
+    .required()
+    .test(
+      'file-size',
+      'attach an image with a size smaller than 1MB',
+      (value) => {
+        if (
+          '0' in value &&
+          typeof value[0] === 'object' &&
+          value[0] &&
+          'size' in value[0] &&
+          typeof value[0].size === 'number' // TODO: move this to type-guard
+        )
+          return value && value[0].size <= 1000000;
+      }
+    )
+    .test('file-type', 'png, jpeg or jpg are allowed', (value) => {
+      if (
+        '0' in value &&
+        typeof value[0] === 'object' &&
+        value[0] &&
+        'type' in value[0] &&
+        typeof value[0].type === 'string' // TODO: move this to type-guard
+      )
+        return value[0].type === 'image/jpeg' || value[0].type === 'image/png';
+    }),
 
   country: yup.string().required(),
 });

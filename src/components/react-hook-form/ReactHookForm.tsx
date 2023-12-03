@@ -1,14 +1,19 @@
 import { ChangeEvent, useState } from 'react';
-import { useAppSelector } from '../../store/hooks/typed-hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/typed-hooks';
 import styles from './ReactHookForm.module.sass';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Error from '../error/Error';
 import { schema } from '../../utils/logic/validation';
-import { FormData } from '../../utils/interfaces/validation';
+import { FormData } from '../../utils/types/interfaces';
+import { formSlice } from '../../store/reducers/FormSlice';
 
 const ReactHookForm: React.FC = (): JSX.Element => {
-  const { countries } = useAppSelector((state) => state.gifReducer);
+  const { countries, tempPicture } = useAppSelector(
+    (state) => state.gifReducer
+  );
+  const { setTempPicture } = formSlice.actions;
+  const dispatch = useAppDispatch();
   const [randomCountry] = useState<string>(
     countries[Math.floor(Math.random() * countries.length)]
   );
@@ -19,8 +24,9 @@ const ReactHookForm: React.FC = (): JSX.Element => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
@@ -41,14 +47,39 @@ const ReactHookForm: React.FC = (): JSX.Element => {
 
   const setCountry = (country: string): void => {
     setCountryText(country);
+    setValue('country', country);
     setCountryMatches([]);
   };
 
   const onSubmitHandler = (data: FormData): void => {
-    const dataWithCountry = { ...data, country: countryText };
-    console.log(dataWithCountry);
+    console.log(data);
+    console.log(tempPicture);
+
     reset();
     setCountryText('');
+  };
+
+  const handlePicture = async (
+    e: ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
+    register('picture').onChange(e);
+
+    if ('files' in e.target && e.target.files) {
+      const file: File = e.target.files[0];
+      const base64 = await generateBase64(file);
+      if (typeof base64 !== 'string') return;
+      dispatch(setTempPicture(base64));
+    }
+  };
+
+  const generateBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const fileReader: FileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = (): void => resolve(fileReader.result);
+      fileReader.onerror = (error: ProgressEvent<FileReader>): void =>
+        reject(error);
+    });
   };
 
   return (
@@ -114,11 +145,12 @@ const ReactHookForm: React.FC = (): JSX.Element => {
           <input
             className={styles.file}
             type="file"
-            {...register('pic')}
+            {...register('picture')}
             id="pic"
+            onChange={(e) => handlePicture(e)}
           />
         </div>
-        <Error error={errors.pic} />
+        <Error error={errors.picture} />
         <input
           className={styles.formElement}
           type="text"
