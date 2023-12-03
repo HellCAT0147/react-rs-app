@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { FormData } from '../types/interfaces';
+import { genders } from '../types/types';
 
 export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
   name: yup
@@ -50,7 +51,7 @@ export const schema: yup.ObjectSchema<FormData> = yup.object().shape({
     .oneOf([yup.ref('password')], 'passwords must match')
     .required('confirm password'),
 
-  gender: yup.string().oneOf(['f', 'm', 'o']).required(),
+  gender: yup.string().oneOf(genders).required(),
 
   terms: yup.boolean().isTrue().required(),
 

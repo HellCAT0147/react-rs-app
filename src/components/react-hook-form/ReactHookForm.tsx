@@ -7,16 +7,17 @@ import Error from '../error/Error';
 import { schema } from '../../utils/logic/validation';
 import { FormData } from '../../utils/types/interfaces';
 import { formSlice } from '../../store/reducers/FormSlice';
+import { genders } from '../../utils/types/types';
 
 const ReactHookForm: React.FC = (): JSX.Element => {
   const { countries, tempPicture } = useAppSelector(
     (state) => state.gifReducer
   );
-  const { setTempPicture } = formSlice.actions;
+  const { setTempPicture, setUser } = formSlice.actions;
   const dispatch = useAppDispatch();
   const [randomCountry] = useState<string>(
     countries[Math.floor(Math.random() * countries.length)]
-  );
+  ); // TODO: move to useMemo
   const [countryMatches, setCountryMatches] = useState<string[]>([]);
   const [countryText, setCountryText] = useState<string>();
 
@@ -52,11 +53,19 @@ const ReactHookForm: React.FC = (): JSX.Element => {
   };
 
   const onSubmitHandler = (data: FormData): void => {
-    console.log(data);
-    console.log(tempPicture);
-
+    dispatch(
+      setUser({
+        age: data.age,
+        password: data.password,
+        country: data.country || '',
+        email: data.email,
+        gender: data.gender,
+        name: data.name,
+        terms: data.terms,
+        picture: tempPicture,
+      })
+    );
     reset();
-    setCountryText('');
   };
 
   const handlePicture = async (
@@ -125,9 +134,13 @@ const ReactHookForm: React.FC = (): JSX.Element => {
           className={`${styles.formElement} ${styles.selectMenu}`}
           {...register('gender')}
         >
-          <option value="f">Female</option>
-          <option value="m">Male</option>
-          <option value="o">Other</option>
+          {genders.map((gender, id) => {
+            return (
+              <option value={gender} key={id}>
+                {gender}
+              </option>
+            );
+          })}
         </select>
         <Error error={errors.gender} />
         <div className={`${styles.labelledInput} ${styles.reversed}`}>
