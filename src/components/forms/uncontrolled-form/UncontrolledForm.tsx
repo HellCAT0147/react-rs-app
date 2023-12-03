@@ -16,6 +16,7 @@ import {
 } from '../../../utils/types/type-guards';
 import { bundleErrors } from '../../../utils/logic/errors';
 import Error from '../../error/Error';
+import { generateBase64 } from '../../../utils/converters/base64';
 
 const UncontrolledForm: React.FC = (): JSX.Element => {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -33,7 +34,7 @@ const UncontrolledForm: React.FC = (): JSX.Element => {
   const { countries, tempPicture } = useAppSelector(
     (state) => state.gifReducer
   );
-  const { setTempPicture, setUser } = formSlice.actions;
+  const { setTempPicture, setRefUser } = formSlice.actions;
   const dispatch = useAppDispatch();
   const [randomCountry] = useState<string>(
     countries[Math.floor(Math.random() * countries.length)]
@@ -62,7 +63,7 @@ const UncontrolledForm: React.FC = (): JSX.Element => {
 
   const onSubmitHandler = (data: FormData): void => {
     dispatch(
-      setUser({
+      setRefUser({
         age: data.age,
         password: data.password,
         country: data.country || '',
@@ -112,16 +113,6 @@ const UncontrolledForm: React.FC = (): JSX.Element => {
       if (typeof base64 !== 'string') return;
       dispatch(setTempPicture(base64));
     }
-  };
-
-  const generateBase64 = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const fileReader: FileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = (): void => resolve(fileReader.result);
-      fileReader.onerror = (error: ProgressEvent<FileReader>): void =>
-        reject(error);
-    });
   };
 
   return (

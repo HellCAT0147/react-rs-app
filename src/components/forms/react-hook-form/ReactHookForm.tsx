@@ -12,6 +12,7 @@ import { FormData } from '../../../utils/types/interfaces';
 import { formSlice } from '../../../store/reducers/FormSlice';
 import { genders } from '../../../utils/types/types';
 import { useNavigate } from 'react-router-dom';
+import { generateBase64 } from '../../../utils/converters/base64';
 
 const ReactHookForm: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const ReactHookForm: React.FC = (): JSX.Element => {
   const { countries, tempPicture } = useAppSelector(
     (state) => state.gifReducer
   );
-  const { setTempPicture, setUser } = formSlice.actions;
+  const { setTempPicture, setHookUser } = formSlice.actions;
   const dispatch = useAppDispatch();
   const [randomCountry] = useState<string>(
     countries[Math.floor(Math.random() * countries.length)]
@@ -60,7 +61,7 @@ const ReactHookForm: React.FC = (): JSX.Element => {
 
   const onSubmitHandler = (data: FormData): void => {
     dispatch(
-      setUser({
+      setHookUser({
         age: data.age,
         password: data.password,
         country: data.country || '',
@@ -86,16 +87,6 @@ const ReactHookForm: React.FC = (): JSX.Element => {
       if (typeof base64 !== 'string') return;
       dispatch(setTempPicture(base64));
     }
-  };
-
-  const generateBase64 = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const fileReader: FileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = (): void => resolve(fileReader.result);
-      fileReader.onerror = (error: ProgressEvent<FileReader>): void =>
-        reject(error);
-    });
   };
 
   return (
